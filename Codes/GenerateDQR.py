@@ -14,13 +14,14 @@ import numpy
 import scipy
 import operator 
 import copy
+import Information_Based_Learning_Part_1
 
 def dir_ok():
 	print("Check configuration")
-	folders = os.listdir('./')
+	folders = os.listdir('../')
 	if "Results" not in folders:
 		print("Create folder 'Results'")
-		os.mkdir('./Results')
+		os.mkdir('../Results')
 	else :
 		print("Configuration ok")
 	
@@ -40,7 +41,7 @@ def show(data):
 			result = [go.Histogram(x=data[cat])]
 		else:
 			result = [go.Bar(x=data[cat].value_counts().keys(),y=data[cat].value_counts().values)]
-		py.plot(result, filename="./Results/"+cat+".html")
+		py.plot(result, filename="../Results/"+cat+".html")
 
 def percent_miss(list_cat):
 	percent = 0 
@@ -129,8 +130,8 @@ def traitement_categorical(list_categorical, data):
 
 def traitement_file_in(path):
 	print("Traitement of the file")
-	continuous = "./Results/Couillard-DQR-ContinuousFeatures.csv.csv"
-	categorical = "./Results/Couillard-DQR-CategoricalFeatures.csv"
+	continuous = "../Results/DQR-ContinuousFeatures.csv.csv"
+	categorical = "../Results/DQR-CategoricalFeatures.csv"
 	data = pandas.read_csv(path)
 	categories = data.columns
 
@@ -145,7 +146,7 @@ def traitement_file_in(path):
 	
 if __name__ == "__main__":
 	print("Launch of moddeling")
-	path_entre = "./Data/DataSet.csv"
+	path_entre = "../Data/DataSet.csv"
 	dir_ok()
 	traitement_file_in(path_entre)
 	#data = pandas.read_csv(path_entre)

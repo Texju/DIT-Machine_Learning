@@ -14,6 +14,7 @@ from sklearn.metrics import accuracy_score
 import numpy as np
 import pandas as pd
 import GenerateDQR
+import Information_Based_Learning_Part_1 as base1
 
 fromUrl = False
 
@@ -74,7 +75,7 @@ vectorizer = DictVectorizer( sparse = False )
 vec_cat_dfs = vectorizer.fit_transform(cat_dfs) 
 # Merge Categorical and Numeric Descriptive Features
 train_dfs = np.hstack((numeric_dfs.as_matrix(), vec_cat_dfs ))
-print(train_dfs)
+
 
 #---------------------------------------------------------------
 #   Create and train a decision tree model using sklearn api
@@ -84,13 +85,11 @@ decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
 #fit the model using the numeric representations of the training data
 decTreeModel.fit(train_dfs, targetLabels)
 
-print(decTreeModel)
-
 #---------------------------------------------------------------
 #   Define 2 Queries, Make Predictions, Map Predictions to Levels
 #---------------------------------------------------------------
-print(numeric_features)
-print(list_categorical_drop)
+#print(numeric_features)
+#print(list_categorical_drop)
 # ['age', 'industry code', 'occupation code', 'wage per hour', 'capital gains', 'capital losses', 'divdends from stocks', 'instance weight', 'num persons worked for employer', 'own business or self employed', 'veterans benefits', 'weeks worked in year', 'year'] 
 
 # ['class of worker', 'education', 'enrolled in edu inst last wk', 'marital status', 'major industry code', 'major occupation code', 'race', 'hispanic Origin', 'sex', 'member of a labor union', 'reason for unemployment', 'full or part time employment stat', 'tax filer status', 'region of previous residence', 'state of previous residence', 'detailed household and family stat', 'detailed household summary in household', 'live in this house 1 year ago', 'family members under 18', 'country of birth father', 'country of birth mother', 'country of birth self', 'citizenship', "fill inc questionnaire for veteran's admin", 'target']
@@ -98,7 +97,10 @@ print(list_categorical_drop)
 ### TODO : FAIRE UNE QUERY
 q = {'age':[39,50],'workclass':['State-gov','Self-emp-not-inc'],'fnlwgt':[77516,83311],'education':['Bachelors','Bachelors'],'education-num':[13,13],'marital-status':['Never-married','Married-civ-spouse'],'occupation':['Adm-clerical','Exec-managerial'],'relationhip':['Not-in-family','Husband'],'race':['White','White'],'sex':['Male','Male'],'capital-gain':[2174,0],'capital-loss':[0,0],'hours-per-week':[40,13],'native_country':['United-States','United-States']}
 col_names = list(data.describe())
-
+for feature in col_names:
+	# calculer information gain
+	 res = base1.informationGain(data.columns.get_loc(feature), data[feature])
+	 print(res)
 """
 qdf = pd.DataFrame.from_dict(q,orient="columns")
 #extract the numeric features

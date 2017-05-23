@@ -1,0 +1,30 @@
+,Feature,Count,Miss,Card,Mode,Mode Freq,Mode %,2nd Mode,2nd Mode Freq,2nd Mode %
+0,class of worker,199523,0.0,9,Not in universe,100245,50.24,Private,72028,36.1
+1,education,199523,0.0,17,High school graduate,48407,24.26,Children,47422,23.77
+2,enrolled in edu inst last wk,199523,0.0,3,Not in universe,186943,93.69,High school,6892,3.45
+3,marital status,199523,0.0,7,Never married,86485,43.35,Married-civilian spouse present,84222,42.21
+4,major industry code,199523,0.0,24,Not in universe or children,100684,50.46,Retail trade,17070,8.56
+5,major occupation code,199523,0.0,15,Not in universe,100684,50.46,Adm support including clerical,14837,7.44
+6,race,199523,0.0,5,White,167365,83.88,Black,20415,10.23
+7,hispanic Origin,199523,0.0,10,All other,171907,86.16,Mexican-American,8079,4.05
+8,sex,199523,0.0,2,Female,103984,52.12,Male,95539,47.88
+9,member of a labor union,199523,0.0,3,Not in universe,180459,90.45,No,16034,8.04
+10,reason for unemployment,199523,0.0,6,Not in universe,193453,96.96,Other job loser,2038,1.02
+11,full or part time employment stat,199523,0.0,8,Children or Armed Forces,123769,62.03,Full-time schedules,40736,20.42
+12,tax filer status,199523,0.0,6,Nonfiler,75094,37.64,Joint both under 65,67383,33.77
+13,region of previous residence,199523,0.0,6,Not in universe,183750,92.09,South,4889,2.45
+14,state of previous residence,199523,0.35,51,Not in universe,183750,92.09,California,1714,0.86
+15,detailed household and family stat,199523,0.0,38,Householder,53248,26.69,Child <18 never marr not in subfamily,50326,25.22
+16,detailed household summary in household,199523,0.0,8,Householder,75475,37.83,Child under 18 never married,50426,25.27
+17,migration code-change in msa,199523,49.97,10,?,99696,49.97,Nonmover,82538,41.37
+18,migration code-change in reg,199523,49.97,9,?,99696,49.97,Nonmover,82538,41.37
+19,migration code-move within reg,199523,49.97,10,?,99696,49.97,Nonmover,82538,41.37
+20,live in this house 1 year ago,199523,0.0,3,Not in universe under 1 year old,101212,50.73,Yes,82538,41.37
+21,migration prev res in sunbelt,199523,49.97,4,?,99696,49.97,Not in universe,84054,42.13
+22,family members under 18,199523,0.0,5,Not in universe,144232,72.29,Both parents present,38983,19.54
+23,country of birth father,199523,3.36,43,United-States,159163,79.77,Mexico,10008,5.02
+24,country of birth mother,199523,3.07,43,United-States,160479,80.43,Mexico,9781,4.9
+25,country of birth self,199523,1.7,43,United-States,176989,88.71,Mexico,5767,2.89
+26,citizenship,199523,0.0,5,Native- Born in the United States,176992,88.71,Foreign born- Not a citizen of U S,13401,6.72
+27,fill inc questionnaire for veteran's admin,199523,0.0,3,Not in universe,197539,99.01,No,1593,0.8
+28,target,199523,0.0,2,- 50000.,187141,93.79,50000+.,12382,6.21

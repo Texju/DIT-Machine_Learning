@@ -26,22 +26,26 @@ if (fromUrl):
     #https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names
     columnHeadings=['age','workclass','fnlwgt','education','education-num','marital-status','occupation','relationship','race','sex','capital-gain','capital-loss','hours-per-week','native-country','annualincome']
     # we can directly use read_csv to download the file
-    censusData = pd.read_csv(fileUrl,header=None,names=columnHeadings,index_col=False,na_values=['?'],nrows=32560)
+    data = pd.read_csv(fileUrl,header=None,names=columnHeadings,index_col=False,na_values=['?'],nrows=32560)
     # save the file locally 
-    censusData.to_csv('../Datasets/censusDataRaw.csv',index=False)
+    data.to_csv('../Datasets/censusDataRaw.csv',index=False)
 else:
     #Reading the dataset from a local file
     #---------------------------------------------
-    censusData = pd.read_csv("../Datasets/censusDataRaw.csv",index_col=False,na_values=['?'],nrows=32560)
+    #censusData = pd.read_csv("../Datasets/censusDataRaw.csv",index_col=False,na_values=['?'],nrows=32560)
+    # Set your dataset path below:
+    path_dataset = "../Data/DataSet.csv"
+    # Read the data and separate continuous & categorical values:
+    data = pd.read_csv(path_dataset)
 
 
 # Extract Target Feature
-targetLabels = censusData['annualincome']
+targetLabels = data['target']
 # Extract Numeric Descriptive Features
-numeric_features = ['age','fnlwgt','education-num','capital-gain','capital-loss','hours-per-week']
-numeric_dfs = censusData[numeric_features]
+numeric_features = list(data.select_dtypes(exclude=['O']))
+numeric_dfs = data[numeric_features]
 # Extract Categorical Descriptive Features
-cat_dfs = censusData.drop(numeric_features + ['annualincome'],axis=1)
+cat_dfs = data.drop(numeric_features + ['target'],axis=1)
 # Remove missing values and apply one-hot encoding
 cat_dfs.replace('?','NA')
 cat_dfs.fillna( 'NA', inplace = True )
@@ -62,10 +66,12 @@ decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
 #fit the model using the numeric representations of the training data
 decTreeModel.fit(train_dfs, targetLabels)
 
+print(decTreeModel)
+
 #---------------------------------------------------------------
 #   Define 2 Queries, Make Predictions, Map Predictions to Levels
 #---------------------------------------------------------------
-
+"""
 q = {'age':[39,50],'workclass':['State-gov','Self-emp-not-inc'],'fnlwgt':[77516,83311],'education':['Bachelors','Bachelors'],'education-num':[13,13],'marital-status':['Never-married','Married-civ-spouse'],'occupation':['Adm-clerical','Exec-managerial'],'relationhip':['Not-in-family','Husband'],'race':['White','White'],'sex':['Male','Male'],'capital-gain':[2174,0],'capital-loss':[0,0],'hours-per-week':[40,13],'native_country':['United-States','United-States']}
 col_names = ['age','workclass','fnlwgt','education','education-num','marital-status','occupation','relationhip','race','sex','capital-gain','capital-loss','hours-per-week','native_country']
 qdf = pd.DataFrame.from_dict(q,orient="columns")
@@ -82,13 +88,14 @@ predictions = decTreeModel.predict([query[0],query[1]])
 print("Predictions!")
 print("------------------------------")
 print(predictions)
-
+"""
 
 
 
 #--------------------------------------------
 # Hold-out Test Set + Confusion Matrix
 #--------------------------------------------
+"""
 #define a decision tree model using entropy based information gain
 decTreeModel2 = tree.DecisionTreeClassifier(criterion='entropy')
 #Split the data: 60% training : 40% test set
@@ -114,10 +121,12 @@ plt.colorbar()
 plt.ylabel('True label')
 plt.xlabel('Predicted label')
 plt.show()
+"""
 
 #--------------------------------------------
 # Cross-validation to Compare to Models
 #--------------------------------------------
+"""
 #run a 10 fold cross validation on this model using the full census data
 scores=cross_validation.cross_val_score(decTreeModel2, instances_train, target_train, cv=10)
 #the cross validaton function returns an accuracy score for each fold
@@ -132,5 +141,5 @@ scores=cross_validation.cross_val_score(decTreeModel3, instances_train, target_t
 print("Gini based Model:")
 print("Score by fold: " + str(scores))
 print("Accuracy: %0.4f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-
+"""
 

@@ -22,7 +22,11 @@ data = MLData('../Data/DataSet.csv')
 tree = MLTree()
 tree.setTrainingData(data.Training)
 tree.Type="DecisionTree"
-tree.ignored_features = ["machin"]
+tree.ignored_features = [
+        "industry code",    # duplicate of "major industry code"
+        "occupation code",  # duplicate of "major occupation code"
+        "detailed household summary in household", # duplicate of "detailed household and family stat" with less info
+        ]
 
 print("Creating tree")
 tree.learn()

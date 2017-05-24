@@ -61,6 +61,9 @@ class MLTree:
             
             # Remove missing values and apply one-hot encoding
             categorical_dfs.replace('?','NA')
+            categorical_dfs.replace('Not in universe','NA')
+            categorical_dfs.replace('Do not know','NA')
+            categorical_dfs.replace('Not in universe or children','NA')
             categorical_dfs.fillna( 'NA', inplace = True )
             
             #transpose into array of dictionaries (one dict per instance) of feature:level pairs

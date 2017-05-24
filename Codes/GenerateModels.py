@@ -7,10 +7,15 @@ from sklearn import preprocessing
 from sklearn import tree
 from sklearn import cross_validation
 from sklearn.feature_extraction import DictVectorizer
-from sklearn import cross_validation
+from sklearn import model_selection
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
+
+from sklearn.datasets import load_iris
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
+
 import sklearn
 import numpy as np
 import pandas as pd
@@ -18,14 +23,34 @@ import GenerateDQR
 import Information_Based_Learning_Part_1 as base1
 import itertools
 import pydotplus
+import matplotlib.pyplot as plt
+from sklearn import svm, datasets
 
-fromUrl = False
+### INFORMATION FOR GRAPH :
+# http://scikit-learn.org/stable/modules/linear_model.html
+# http://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_model_selection.html#sphx-glr-auto-examples-linear-model-plot-lasso-model-selection-py 
 
+def toVectorizerCompatible(data, feature_list):
+	cat_list = []
+	first = True
+	
+	for feature in feature_list:
+		for i, v in data[feature].items():
+			if first == True:
+				cat_list.append({})
+			
+			cat_list[i][feature] = v
+		first = False
+		
+	return cat_list
 
-def visualize_tree(tree):
-	dot_data = sklearn.tree.export_graphviz(tree, out_file=None)
-	graph = pydotplus.graph_from_dot_data(dot_data) 
-	graph.write_pdf("tree.pdf")
+def visualize_tree(tree, pdf = True):
+	if pdf : 
+		dot_data = sklearn.tree.export_graphviz(tree, out_file=None)
+		graph = pydotplus.graph_from_dot_data(dot_data) 
+		graph.write_pdf("tree.pdf")
+	else :
+		dot_data = sklearn.tree.export_graphviz(tree, out_file="tree.dot")
 	
 
 def reject_to_misses(feature_list, data):
@@ -39,28 +64,10 @@ def reject_to_misses(feature_list, data):
 			feature_list.remove(feature)	
 	return feature_list, list_delete
 
-if (fromUrl):
-	#Reading the dataset from an online repository:
-	#-----------------------------------------------
-	fileUrl = 'https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data'
-	#define the list of column headings for the dataset. This list is based on the documentation
-	#for the dataset available at: 
-	#https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names
-	columnHeadings=['age','workclass','fnlwgt','education','education-num','marital-status','occupation','relationship','race','sex','capital-gain','capital-loss','hours-per-week','native-country','annualincome']
-	# we can directly use read_csv to download the file
-	data = pd.read_csv(fileUrl,header=None,names=columnHeadings,index_col=False,na_values=['?'],nrows=32560)
-	# save the file locally 
-	data.to_csv('../Datasets/censusDataRaw.csv',index=False)
-else:
-	#Reading the dataset from a local file
-	#---------------------------------------------
-	#censusData = pd.read_csv("../Datasets/censusDataRaw.csv",index_col=False,na_values=['?'],nrows=32560)
-	# Set your dataset path below:
-	path_dataset = "../Data/DataSet.csv"
-	# Read the data and separate continuous & categorical values:
-	data = pd.read_csv(path_dataset)
-
-
+# Set your dataset path below:
+path_dataset = "../Data/DataSet.csv"
+# Read the data and separate continuous & categorical values:
+data = pd.read_csv(path_dataset)
 # Extract Target Feature
 targetLabels = data['target']
 # Extract Numeric Descriptive Features
@@ -81,6 +88,39 @@ vectorizer = DictVectorizer( sparse = False )
 vec_cat_dfs = vectorizer.fit_transform(cat_dfs) 
 # Merge Categorical and Numeric Descriptive Features
 train_dfs = np.hstack((numeric_dfs.as_matrix(), vec_cat_dfs ))
+
+print(train_dfs.shape)
+print(train_dfs.target)
+train_dfs_new = SelectKBest(chi2, k=2).fit_transform(train_dfs, targetLabels)
+print(train_dfs_new.shape)
+
+
+#K-Folds cross-validator
+#model_selection.KFold([n_splits, shuffle, ...]) 	
+#K-fold iterator variant with non-overlapping groups.
+#model_selection.GroupKFold([n_splits]) 	
+#Stratified K-Folds cross-validator
+#model_selection.StratifiedKFold([n_splits, ...]) 	
+#Leave One Group Out cross-validator
+#model_selection.LeaveOneGroupOut() 	
+#Leave P Group(s) Out cross-validator
+#model_selection.LeavePGroupsOut(n_groups) 	
+#Leave-One-Out cross-validator
+#model = model_selection.LeaveOneOut() 	
+#Leave-P-Out cross-validator
+#model_selection.LeavePOut(p) 	
+#Random permutation cross-validator
+#model_selection.ShuffleSplit([n_splits, ...]) 	
+#Shuffle-Group(s)-Out cross-validation iterator
+#model_selection.GroupShuffleSplit([...]) 	
+#Stratified ShuffleSplit cross-validator
+#model_selection.StratifiedShuffleSplit([...]) 	
+#Predefined split cross-validator
+#model_selection.PredefinedSplit(test_fold) 	
+#Time Series cross-validator
+#model_selection.TimeSeriesSplit([n_splits]) 	
+
+print(model)
 
 
 #---------------------------------------------------------------
@@ -113,7 +153,7 @@ for i in col_names_tmp:
 	col_names.append(i)
 	#print(i)
 col_names.remove("target")
-visualize_tree(decTreeModel)
+#visualize_tree(decTreeModel, True)
 
 """
 for i in range(0, decTreeModel.n_classes_):

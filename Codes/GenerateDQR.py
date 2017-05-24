@@ -28,7 +28,7 @@ def dir_ok():
 def count_occurences(values):
 	occurences = dict()
 	for value in values:
-		value = value.strip()
+		value = str(value).strip()
 		if not value in occurences:
 			occurences[value] = 0
 		occurences[value] += 1
@@ -49,7 +49,13 @@ def percent_miss(list_cat):
 	for elem in list_cat:
 		nb_elem = nb_elem + 1
 		elem = str(elem)
-		if elem == " ?" or elem.find("Not in universe") != -1 :
+		if elem == " ?" :
+			percent = percent + 1
+		elif elem.find("Not in universe") != -1 :
+			percent = percent + 1
+		elif elem.find("Do not know") != -1 :
+			percent = percent + 1
+		elif elem.find("NA") != -1: 
 			percent = percent + 1
 	percent = (percent ) /  nb_elem
 	percent = round(percent,4)
@@ -136,8 +142,13 @@ def traitement_file_in(path):
 	data = pandas.read_csv(path)
 	categories = data.columns
 
+	list_wrong_categories = ["year", "industry code", "occupation code", "own business or self employed", "veterans benefits" ]
 	list_continuous = list(data.select_dtypes(exclude=['O']))
 	list_categorical = list(data.select_dtypes(include=['O']))
+	for cat in list_wrong_categories:
+		list_continuous.remove(cat)
+		list_categorical.append(cat)
+	
 	
 	table_continuous = traitement_continuous(list_continuous, data)
 	table_categorical = traitement_categorical(list_categorical, data)

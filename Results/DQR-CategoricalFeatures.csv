@@ -6,7 +6,7 @@
 4,major industry code,199523,0.5046,24,Not in universe or children,100684,0.5046,Retail trade,17070,0.0856
 5,major occupation code,199523,0.5046,15,Not in universe,100684,0.5046,Adm support including clerical,14837,0.0744
 6,race,199523,0.0,5,White,167365,0.8388,Black,20415,0.1023
-7,hispanic Origin,199523,0.0,10,All other,171907,0.8616,Mexican-American,8079,0.0405
+7,hispanic Origin,199523,0.0059,10,All other,171907,0.8616,Mexican-American,8079,0.0405
 8,sex,199523,0.0,2,Female,103984,0.5212,Male,95539,0.4788
 9,member of a labor union,199523,0.9045,3,Not in universe,180459,0.9045,No,16034,0.0804
 10,reason for unemployment,199523,0.9696,6,Not in universe,193453,0.9696,Other job loser,2038,0.0102
@@ -28,3 +28,8 @@
 26,citizenship,199523,0.0,5,Native- Born in the United States,176992,0.8871,Foreign born- Not a citizen of U S,13401,0.0672
 27,fill inc questionnaire for veteran's admin,199523,0.9901,3,Not in universe,197539,0.9901,No,1593,0.008
 28,target,199523,0.0,2,- 50000.,187141,0.9379,50000+.,12382,0.0621
+29,year,199523,0.0,2,94,99827,0.5003,95,99696,0.4997
+30,industry code,199523,0.0,52,0,100684,0.5046,33,17070,0.0856
+31,occupation code,199523,0.0,47,0,100684,0.5046,2,8756,0.0439
+32,own business or self employed,199523,0.0,3,0,180672,0.9055,2,16153,0.081
+33,veterans benefits,199523,0.0,3,2,150130,0.7524,0,47409,0.2376

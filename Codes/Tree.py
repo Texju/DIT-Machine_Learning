@@ -11,6 +11,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 import numpy
 from sklearn import tree
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
 
 
 # TODO : 

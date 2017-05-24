@@ -8,6 +8,7 @@ Created on Wed May 24 15:00:15 2017
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.neighbors import NearestNeighbors
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
 import numpy
 import copy
 from sklearn import tree
@@ -75,6 +76,8 @@ class MLTree:
             self.__treeType = treeType
         elif self.__treeType == "RandomForest":
             self.__treeType = treeType
+        elif self.__treeType == "GaussianNB":
+            self.__treeType = treeType
         else:
             raise ValueError('Tree type not implemented (yet?)')
             
@@ -140,19 +143,26 @@ class MLTree:
             #   Create and train a decision tree model using sklearn api
             #---------------------------------------------------------------
             #create an instance of a Random Forest tree model.
-            """
+            
             elif self.__treeType == "RandomForest":
                 # Train random forest classifier, calibrate on validation data and evaluate
                 # on test data
                 clf = RandomForestClassifier(n_estimators=25)
-                clf.fit(self.__tree, self.__target)
-                # TODO : X_test ??? 
-                clf_probs = clf.predict_proba(X_test)
+                clf.fit(self.__data[0], self.__target)
+                clf_probs = clf.predict_proba(self.__data[2])
                 sig_clf = CalibratedClassifierCV(clf, method="sigmoid", cv="prefit")
-                # TODO : X_test ??? 
-                sig_clf.fit(X_valid, y_valid)
-                sig_clf_probs = sig_clf.predict_proba(X_test)
+                # /!\ self.__target == y_valid
+                sig_clf.fit(self.__data[1], self.__target)
+                sig_clf_probs = sig_clf.predict_proba(self.__data[2])
                 sig_score = log_loss(y_test, sig_clf_probs)
-            """
+
+            elif self.__treeType == "GaussianNB":
+                gnb = GaussianNB()
+                y_pred = gnb.fit(iris.data, iris.target).predict(self.__data[0])
+                """
+                print("Number of mislabeled points out of a total %d points : %d"
+                ...       % (iris.data.shape[0],(iris.target != y_pred).sum()))
+                """ 
+
         else:
             raise ValueError('Training data not prepared.')

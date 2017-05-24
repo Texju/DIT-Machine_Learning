@@ -1,8 +1,6 @@
 from Data import MLData
 from Tree import MLTree
 from validation import MLValidation
-import feature_selection
-import sklearn
 
 """
 Data usage:
@@ -36,20 +34,30 @@ tree.ignored_features = [
         ]
 
 print("Creating tree")
-#train_dfs = tree.prepareData()
-#tree_select = feature_selection.FeatureSelection(train_dfs, tree.Target)
-#tree_select = tree_select.select_threshold(0.1)
-#print(tree_select.dtype.names)
-tree.learn()
-#print("Creating tree visualization")
-#dot_data = sklearn.tree.export_graphviz(tree.Tree, out_file="out.dot")
-#print("Creating dot file")
-#graph = pydotplus.graph_from_dot_data(dot_data) 
-#print("Creating pdf")
-#graph.write_pdf("tree.pdf")
-#print(data.Training)
 
-print("testing")
+#--------------------------------------------
+# Hold-out Test Set + Confusion Matrix
+#--------------------------------------------
+print("Learn ")
+tree.learn()
+print("Test ")
+#Split the data: 60% training : 40% test set
+#instances_train, instances_test, target_train, target_test = train_test_split(train_dfs, tree.Target, test_size=0.4, random_state=0)
+#fit the model using just the test set
+
 validation = MLValidation(tree)
 
 validation.test(data)
+
+print("Accuracy : " + str(validation.accuracy()))
+print(validation.confusionMatrix())
+"""
+tree_select = feature_selection.FeatureSelection(train_dfs, tree.Target)
+tree_select = tree_select.select_threshold(0.1)
+print(tree_select.dtype.names)
+"""
+
+#print("testing")
+#validation = MLValidation(tree)
+
+#validation.test(data)

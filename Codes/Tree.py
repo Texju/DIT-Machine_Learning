@@ -13,7 +13,7 @@ import numpy
 import copy
 from sklearn import tree
 
-
+# TODO : CalibratedClassifierCV fix it 
 # TODO : 
 """
 creates 3 different prediction models from the sci-kit library; for example, a decision tree, nearest neighbor, naive bayes models, random forest.
@@ -91,14 +91,15 @@ class MLTree:
 
             # Extract numeric feature list
             numeric_features = list(data.select_dtypes(exclude=['O']))
-            print("Numeric features num: " + str(len(numeric_features)))
+            #print("Numeric features num: " + str(len(numeric_features)))
+            
             # Delete from numeric feature list the features which must be considered as categorical features
             for cat in list_wrong_categories:
                 numeric_features.remove(cat)
 
             # Extract Categorical Descriptive Features
             categorical_dfs = data.drop(numeric_features + ['target'],axis=1)
-            print("Categorical features num: " + str(categorical_dfs.count()))
+            #print("Categorical features num: " + str(categorical_dfs.count()))
             
             # Extract Numeric Descriptive Features
             numeric_dfs = data[numeric_features]
@@ -115,10 +116,10 @@ class MLTree:
             
             #convert to numeric encoding
             vec_cat_dfs = self.__vectorizer.transform(categorical_dfs) 
-            print("Categorical features num: " + str(len(vec_cat_dfs[0])))
+            #print("Categorical features num: " + str(len(vec_cat_dfs[0])))
             # Merge Categorical and Numeric Descriptive Features
             train_dfs = numpy.hstack((numeric_dfs.as_matrix(), vec_cat_dfs))
-            print("final" + str(len(train_dfs[0])))
+            #print("final" + str(len(train_dfs[0])))
             return train_dfs, target
         else:
             raise ValueError('Data not set.')

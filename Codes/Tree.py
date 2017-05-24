@@ -97,7 +97,7 @@ class MLTree:
             #create an instance of a decision tree model.
             
             #fit the model using the numeric representations of the training data
-            decTreeModel.fit(train_dfs, targetLabels)
+            decTreeModel.fit(train_dfs, self.__target)
             
             self.__tree = decTreeModel
         else:

@@ -161,8 +161,8 @@ class MLTree:
                 train_dfsT, sargetT = self.prepareData(self.__data[2])
                 
                 clf = RandomForestClassifier(n_estimators=25)
-                self.__tree.fit(self.__train_dfs, self.__target)
-                
+                clf.fit(self.__train_dfs, self.__target)
+                self.__tree = clf
                 """
                 ## For validation
                 clf_probs = clf.predict_proba(train_dfsT)
@@ -177,7 +177,8 @@ class MLTree:
                 
             elif self.__treeType == "GaussianNB":
                 gnb = GaussianNB()
-                self.__tree = gnb.fit(self.__train_dfs, self.__target)
+                gnb.fit(self.__train_dfs, self.__target)
+                self.__tree = gnb
                 return self.__tree 
                 """
                 print("Number of mislabeled points out of a total %d points : %d"

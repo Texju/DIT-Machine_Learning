@@ -78,7 +78,11 @@ list_categorical, list_categorical_drop = reject_to_misses(list_categorical, dat
 cat_dfs = data.drop(numeric_features + ['target'] + list_categorical_drop,axis=1)
 # Remove missing values and apply one-hot encoding
 cat_dfs.replace('?','NA')
+cat_dfs.replace('Not in universe','NA')
+cat_dfs.replace('Do not know','NA')
+cat_dfs.replace('Not in universe or children','NA')
 cat_dfs.fillna( 'NA', inplace = True )
+
 #transpose into array of dictionaries (one dict per instance) of feature:level pairs
 cat_dfs = cat_dfs.T.to_dict().values()
 #convert to numeric encoding

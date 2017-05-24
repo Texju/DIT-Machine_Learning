@@ -51,21 +51,39 @@ class MLTree:
             # Extract Target Feature
             targetLabels = self.__data['target']
             
-            # Extract Numeric Descriptive Features
+            # List of wrong feature in numerical 
+            list_wrong_categories = ["year", "industry code", "occupation code", "own business or self employed", "veterans benefits" ]
+
+            # Extract feature numeric 
             numeric_features = list(self.__data.select_dtypes(exclude=['O']))
+
+            # Delete from feature numeric wrong feature
+            for cat in list_wrong_categories:
+                numeric_features.remove(cat)
+
+
+            # Extract feature categorical feature 
+            categorical_dfs = self.__data.drop(numeric_features + ['target'],axis=1)
+
+
+            # Extract Numeric Descriptive Features
             numeric_dfs = self.__data[numeric_features]
             
             # Extract Categorical Descriptive Features
             #categorical_features = list(self.__data.select_dtypes(include=['O']))
-            categorical_dfs = self.__data.drop(numeric_features + ['target'],axis=1)
             
+            
+            
+
+            
+
             # Remove missing values and apply one-hot encoding
             categorical_dfs.replace('?','NA')
             categorical_dfs.replace('Not in universe','NA')
             categorical_dfs.replace('Do not know','NA')
             categorical_dfs.replace('Not in universe or children','NA')
             categorical_dfs.fillna( 'NA', inplace = True )
-            
+
             #transpose into array of dictionaries (one dict per instance) of feature:level pairs
             categorical_dfs = categorical_dfs.T.to_dict().values()
             

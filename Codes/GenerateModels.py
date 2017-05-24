@@ -11,12 +11,28 @@ from sklearn import cross_validation
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
+import sklearn
 import numpy as np
 import pandas as pd
 import GenerateDQR
 import Information_Based_Learning_Part_1 as base1
+import itertools
+import subprocess
 
 fromUrl = False
+
+
+def visualize_tree(tree, feature_names):
+    with open("dt.dot", 'w') as f:
+        sklearn.tree.export_graphviz(tree, out_file=f,
+                        feature_names=feature_names)
+    command = ["dot", "-Tpng", "dt.dot", "-o", "dt.png"]
+    try:
+        subprocess.check_call(command)
+    except:
+        exit("Could not run dot, ie graphviz, to "
+             "produce visualization")
+
 
 def reject_to_misses(feature_list, data):
 	list_delete = list()
@@ -31,7 +47,7 @@ def reject_to_misses(feature_list, data):
 			feature_list.remove(feature)	
 	## DEBUG
 	print(len(feature_list))
-	return feature_list 
+	return feature_list, list_delete
 
 if (fromUrl):
 	#Reading the dataset from an online repository:
@@ -59,11 +75,11 @@ else:
 targetLabels = data['target']
 # Extract Numeric Descriptive Features
 numeric_features = list(data.select_dtypes(exclude=['O']))
-numeric_features = reject_to_misses(numeric_features, data)
+numeric_features, numeric_features_drop = reject_to_misses(numeric_features, data)
 numeric_dfs = data[numeric_features]
 # Extract Categorical Descriptive Features
 list_categorical = list(data.select_dtypes(include=['O']))
-list_categorical_drop = reject_to_misses(list_categorical, data)
+list_categorical, list_categorical_drop = reject_to_misses(list_categorical, data)
 cat_dfs = data.drop(numeric_features + ['target'] + list_categorical_drop,axis=1)
 # Remove missing values and apply one-hot encoding
 cat_dfs.replace('?','NA')
@@ -85,6 +101,7 @@ decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
 #fit the model using the numeric representations of the training data
 decTreeModel.fit(train_dfs, targetLabels)
 
+
 #---------------------------------------------------------------
 #   Define 2 Queries, Make Predictions, Map Predictions to Levels
 #---------------------------------------------------------------
@@ -95,12 +112,23 @@ decTreeModel.fit(train_dfs, targetLabels)
 # ['class of worker', 'education', 'enrolled in edu inst last wk', 'marital status', 'major industry code', 'major occupation code', 'race', 'hispanic Origin', 'sex', 'member of a labor union', 'reason for unemployment', 'full or part time employment stat', 'tax filer status', 'region of previous residence', 'state of previous residence', 'detailed household and family stat', 'detailed household summary in household', 'live in this house 1 year ago', 'family members under 18', 'country of birth father', 'country of birth mother', 'country of birth self', 'citizenship', "fill inc questionnaire for veteran's admin", 'target']
 
 ### TODO : FAIRE UNE QUERY
+
 q = {'age':[39,50],'workclass':['State-gov','Self-emp-not-inc'],'fnlwgt':[77516,83311],'education':['Bachelors','Bachelors'],'education-num':[13,13],'marital-status':['Never-married','Married-civ-spouse'],'occupation':['Adm-clerical','Exec-managerial'],'relationhip':['Not-in-family','Husband'],'race':['White','White'],'sex':['Male','Male'],'capital-gain':[2174,0],'capital-loss':[0,0],'hours-per-week':[40,13],'native_country':['United-States','United-States']}
-col_names = list(data.describe())
-for feature in col_names:
-	# calculer information gain
-	 res = base1.informationGain(data.columns.get_loc(feature), data[feature])
-	 print(res)
+
+
+col_names_tmp = itertools.chain(numeric_features,list_categorical)
+col_names = list()
+
+for i in col_names_tmp:
+	col_names.append(i)
+	print(i)
+
+#visualize_tree(decTreeModel, col_names)
+"""
+for i in range(0, decTreeModel.n_classes_):
+	print(decTreeModel.tree_.best_error[i])
+"""
+
 """
 qdf = pd.DataFrame.from_dict(q,orient="columns")
 #extract the numeric features
@@ -123,7 +151,7 @@ print(predictions)
 #--------------------------------------------
 # Hold-out Test Set + Confusion Matrix
 #--------------------------------------------
-
+"""
 #define a decision tree model using entropy based information gain
 decTreeModel2 = tree.DecisionTreeClassifier(criterion='entropy')
 #Split the data: 60% training : 40% test set
@@ -169,5 +197,5 @@ scores=cross_validation.cross_val_score(decTreeModel3, instances_train, target_t
 print("Gini based Model:")
 print("Score by fold: " + str(scores))
 print("Accuracy: %0.4f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-
+"""
 

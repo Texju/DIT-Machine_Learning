@@ -16,6 +16,7 @@ class MLTree:
         self.__treeType = "DecisionTree"
         self.__data = []
         self.__tree = None
+        self.__target = None
         
     @property
     def ignored_features(self):
@@ -34,6 +35,10 @@ class MLTree:
     @property
     def Tree(self):
         return self.__tree
+
+    @property
+    def Target(self):
+        return self.__target
     
     @property
     def Type(self):
@@ -49,7 +54,7 @@ class MLTree:
     def learn(self):
         if len(self.__data) != 0:
             # Extract Target Feature
-            targetLabels = self.__data['target']
+            self.__target = self.__data['target']
             
             # List of features with numerical values but must be considered as categorical features
             list_wrong_categories = ["year", "industry code", "occupation code", "own business or self employed", "veterans benefits" ]

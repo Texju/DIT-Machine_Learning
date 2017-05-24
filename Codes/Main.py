@@ -26,7 +26,7 @@ data = MLData('../Data/DataSet.csv')
 # Create tree
 tree = MLTree()
 tree.setTrainingData(data)
-tree.Type="DecisionTree"
+tree.Type="GaussianNB"
 tree.ignored_features = [
         "industry code",    # duplicate of "major industry code"
         "occupation code",  # duplicate of "major occupation code"
@@ -51,6 +51,18 @@ validation.test(data)
 
 print("Accuracy : " + str(validation.accuracy()))
 print(validation.confusionMatrix())
+"""
+#Draw the confusion matrix
+import matplotlib.pyplot as plt
+# Show confusion matrix in a separate window
+plt.matshow(validation.confusionMatrix)
+plt.plot(confusionMatrix)
+plt.title('Confusion matrix')
+plt.colorbar()
+plt.ylabel('True label')
+plt.xlabel('Predicted label')
+plt.show()
+"""
 """
 tree_select = feature_selection.FeatureSelection(train_dfs, tree.Target)
 tree_select = tree_select.select_threshold(0.1)

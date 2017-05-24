@@ -36,12 +36,10 @@ class MLTree:
         self.__ignore = set(features)
         
     def setTrainingData(self, data):
-        self.__data 
+        self.__data = [data.Training, data.Validation, data.Testing]
         for feature in self.__ignore:
-            data.drop(self.__ignore)
-            
-        self.__data = data
-    
+            data[0].drop(self.__ignore)
+
     @property
     def Tree(self):
         return self.__tree
@@ -69,26 +67,27 @@ class MLTree:
             self.__treeType = treeType
         else:
             raise ValueError('Tree type not implemented (yet?)')
+            
     def prepareData(self):
         if len(self.__data) != 0:
             # Extract Target Feature
-            self.__target = self.__data['target']
+            self.__target = self.__data[0]['target']
             
             # List of features with numerical values but must be considered as categorical features
             list_wrong_categories = ["year", "industry code", "occupation code", "own business or self employed", "veterans benefits" ]
 
             # Extract numeric feature list
-            numeric_features = list(self.__data.select_dtypes(exclude=['O']))
+            numeric_features = list(self.__data[0].select_dtypes(exclude=['O']))
 
             # Delete from numeric feature list the features which must be considered as categorical features
             for cat in list_wrong_categories:
                 numeric_features.remove(cat)
 
             # Extract Categorical Descriptive Features
-            categorical_dfs = self.__data.drop(numeric_features + ['target'],axis=1)
+            categorical_dfs = self.__data[0].drop(numeric_features + ['target'],axis=1)
 
             # Extract Numeric Descriptive Features
-            numeric_dfs = self.__data[numeric_features]
+            numeric_dfs = self.__data[0][numeric_features]
 
             # Remove missing values and apply one-hot encoding
             categorical_dfs.replace('?','NA')

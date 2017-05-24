@@ -6,9 +6,17 @@ Created on Wed May 24 15:00:15 2017
 """
 
 from sklearn.feature_extraction import DictVectorizer
+from sklearn.neighbors import NearestNeighbors
+from sklearn.ensemble import RandomForestClassifier
 import numpy
 from sklearn import tree
 
+
+# TODO : 
+"""
+creates 3 different prediction models from the sci-kit library; for example, a decision tree, nearest neighbor, naive bayes models, random forest.
+
+"""
 class MLTree:
     """This class create a tree from the data"""
     def __init__(self):
@@ -28,6 +36,7 @@ class MLTree:
         self.__ignore = set(features)
         
     def setTrainingData(self, data):
+        self.__data 
         for feature in self.__ignore:
             data.drop(self.__ignore)
             
@@ -44,6 +53,10 @@ class MLTree:
     def Train_dfs(self):
         return self.__train_dfs
 
+    @Train_dfs.setter
+    def Train_dfs(self, Train_dfs):
+        self.__train_dfs = Train_dfs
+        
     @property
     def Type(self):
         return self.__treeType
@@ -51,6 +64,8 @@ class MLTree:
     @Type.setter
     def Type(self, treeType):
         if treeType == "DecisionTree":
+            self.__treeType = treeType
+        elif self.__treeType == "RandomForest":
             self.__treeType = treeType
         else:
             raise ValueError('Tree type not implemented (yet?)')
@@ -94,22 +109,39 @@ class MLTree:
             return self.__train_dfs
         else:
             raise ValueError('Training data not set.')
-        
+
+
     def learn(self):
         if len(self.__train_dfs) != 0:
-            if self.__treeType == "DecisionTree":
-                decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
-                
             #---------------------------------------------------------------
             #   Create and train a decision tree model using sklearn api
             #---------------------------------------------------------------
             #create an instance of a decision tree model.
+
+            if self.__treeType == "DecisionTree":
+                decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
+                #fit the model using the numeric representations of the training data
+                decTreeModel.fit(self.__train_dfs, self.__target)
+                self.__tree = decTreeModel
+                return self.__tree
+                
+            #---------------------------------------------------------------
+            #   Create and train a decision tree model using sklearn api
+            #---------------------------------------------------------------
+            #create an instance of a Random Forest tree model.
             
-            #fit the model using the numeric representations of the training data
-            decTreeModel.fit(self.__train_dfs, self.__target)
+            elif self.__treeType == "RandomForest":
+                # Train random forest classifier, calibrate on validation data and evaluate
+                # on test data
+                clf = RandomForestClassifier(n_estimators=25)
+                clf.fit(self.__tree, self.__target)
+                # TODO : X_test ??? 
+                clf_probs = clf.predict_proba(X_test)
+                sig_clf = CalibratedClassifierCV(clf, method="sigmoid", cv="prefit")
+                # TODO : X_test ??? 
+                sig_clf.fit(X_valid, y_valid)
+                sig_clf_probs = sig_clf.predict_proba(X_test)
+                sig_score = log_loss(y_test, sig_clf_probs)
             
-            self.__tree = decTreeModel
-            
-            return self.__tree
         else:
             raise ValueError('Training data not prepared.')

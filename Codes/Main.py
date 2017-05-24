@@ -1,5 +1,6 @@
 from Data import MLData
 from Tree import MLTree
+from validation import MLValidation
 import feature_selection
 import sklearn
 
@@ -35,15 +36,20 @@ tree.ignored_features = [
         ]
 
 print("Creating tree")
-train_dfs = tree.prepareData()
-tree_select = feature_selection.FeatureSelection(train_dfs, tree.Target)
-tree_select = tree_select.select_threshold(0.1)
-print(tree_select.dtype.names)
+#train_dfs = tree.prepareData()
+#tree_select = feature_selection.FeatureSelection(train_dfs, tree.Target)
+#tree_select = tree_select.select_threshold(0.1)
+#print(tree_select.dtype.names)
+tree.learn()
 #print("Creating tree visualization")
 #dot_data = sklearn.tree.export_graphviz(tree.Tree, out_file="out.dot")
 #print("Creating dot file")
 #graph = pydotplus.graph_from_dot_data(dot_data) 
 #print("Creating pdf")
 #graph.write_pdf("tree.pdf")
-
 #print(data.Training)
+
+print("testing")
+validation = MLValidation(tree)
+
+validation.test(data)

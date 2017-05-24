@@ -9,6 +9,7 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.neighbors import NearestNeighbors
 from sklearn.ensemble import RandomForestClassifier
 import numpy
+import copy
 from sklearn import tree
 
 
@@ -26,6 +27,7 @@ class MLTree:
         self.__tree = None
         self.__target = None
         self.__train_dfs = []
+        self.__vectorizer = DictVectorizer( sparse = False )
         
     @property
     def ignored_features(self):
@@ -35,10 +37,18 @@ class MLTree:
     def ignored_features(self,features):
         self.__ignore = set(features)
         
-    def setTrainingData(self, data):
-        self.__data = [data.Training, data.Validation, data.Testing]
-        for feature in self.__ignore:
-            data[0].drop(self.__ignore)
+    def setTrainingData(self, data, debug=False):
+        self.__data = [data.Training.copy(), data.Validation.copy(), data.Testing.copy()]
+        
+        categorical_dfs = data.Raw.select_dtypes(include=['O'])
+        categorical_dfs = categorical_dfs.T.to_dict().values()
+        self.__vectorizer.fit(categorical_dfs)
+        
+        if(debug == True):
+            print(self.__data[0])
+        self.__data[0].drop(self.__ignore)
+        self.__data[1].drop(self.__ignore)
+        self.__data[2].drop(self.__ignore)
 
     @property
     def Tree(self):
@@ -68,26 +78,27 @@ class MLTree:
         else:
             raise ValueError('Tree type not implemented (yet?)')
             
-    def prepareData(self):
-        if len(self.__data) != 0:
+    def prepareData(self, data):
+        if len(data) != 0:
             # Extract Target Feature
-            self.__target = self.__data[0]['target']
+            target = data['target']
             
             # List of features with numerical values but must be considered as categorical features
             list_wrong_categories = ["year", "industry code", "occupation code", "own business or self employed", "veterans benefits" ]
 
             # Extract numeric feature list
-            numeric_features = list(self.__data[0].select_dtypes(exclude=['O']))
-
+            numeric_features = list(data.select_dtypes(exclude=['O']))
+            print("Numeric features num: " + str(len(numeric_features)))
             # Delete from numeric feature list the features which must be considered as categorical features
             for cat in list_wrong_categories:
                 numeric_features.remove(cat)
 
             # Extract Categorical Descriptive Features
-            categorical_dfs = self.__data[0].drop(numeric_features + ['target'],axis=1)
-
+            categorical_dfs = data.drop(numeric_features + ['target'],axis=1)
+            print("Categorical features num: " + str(categorical_dfs.count()))
+            
             # Extract Numeric Descriptive Features
-            numeric_dfs = self.__data[0][numeric_features]
+            numeric_dfs = data[numeric_features]
 
             # Remove missing values and apply one-hot encoding
             categorical_dfs.replace('?','NA')
@@ -100,17 +111,18 @@ class MLTree:
             categorical_dfs = categorical_dfs.T.to_dict().values()
             
             #convert to numeric encoding
-            vectorizer = DictVectorizer( sparse = False )
-            vec_cat_dfs = vectorizer.fit_transform(categorical_dfs) 
+            vec_cat_dfs = self.__vectorizer.transform(categorical_dfs) 
+            print("Categorical features num: " + str(len(vec_cat_dfs[0])))
             # Merge Categorical and Numeric Descriptive Features
-            self.__train_dfs = numpy.hstack((numeric_dfs.as_matrix(), vec_cat_dfs))
-            
-            return self.__train_dfs
+            train_dfs = numpy.hstack((numeric_dfs.as_matrix(), vec_cat_dfs))
+            print("final" + str(len(train_dfs[0])))
+            return train_dfs, target
         else:
-            raise ValueError('Training data not set.')
-
+            raise ValueError('Data not set.')
 
     def learn(self):
+        self.__train_dfs, self.__target = self.prepareData(self.__data[0])
+        
         if len(self.__train_dfs) != 0:
             #---------------------------------------------------------------
             #   Create and train a decision tree model using sklearn api
@@ -128,7 +140,7 @@ class MLTree:
             #   Create and train a decision tree model using sklearn api
             #---------------------------------------------------------------
             #create an instance of a Random Forest tree model.
-            
+            """
             elif self.__treeType == "RandomForest":
                 # Train random forest classifier, calibrate on validation data and evaluate
                 # on test data
@@ -141,6 +153,6 @@ class MLTree:
                 sig_clf.fit(X_valid, y_valid)
                 sig_clf_probs = sig_clf.predict_proba(X_test)
                 sig_score = log_loss(y_test, sig_clf_probs)
-            
+            """
         else:
             raise ValueError('Training data not prepared.')

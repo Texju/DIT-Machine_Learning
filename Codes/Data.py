@@ -5,6 +5,7 @@ Created on Wed May 24 12:22:41 2017
 @author: Jean Thevenet
 """
 
+import copy
 import pandas
 import numpy
 
@@ -13,16 +14,17 @@ class MLData:
     
     def __init__(self, csvPath):
         self.__CSV = pandas.read_csv(csvPath,delimiter=',')
-        self.__Data = self.__CSV
+        self.__Data = self.__CSV.copy()
         self.__SplitSizes = [.5, .2] # Default split: 50%, 20%, 30%
         self.__splitData()
-        
+    
+    
     def shuffle(self):
         self.__Data = self.__CSV.sample(frac=1)
         self.__splitData()
 
     def unshuffle(self):
-        self.__Data = self.__CSV
+        self.__Data = self.__CSV.copy()
         self.__splitData()
 
     def __splitData(self):

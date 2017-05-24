@@ -11,41 +11,66 @@ from sklearn import cross_validation
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
+import sklearn
 import numpy as np
 import pandas as pd
+import GenerateDQR
+import Information_Based_Learning_Part_1 as base1
+import itertools
+import pydotplus
 
 fromUrl = False
 
 
+def visualize_tree(tree):
+	dot_data = sklearn.tree.export_graphviz(tree, out_file=None)
+	graph = pydotplus.graph_from_dot_data(dot_data) 
+	graph.write_pdf("tree.pdf")
+	
+
+def reject_to_misses(feature_list, data):
+	list_delete = list()
+	for feature in feature_list :
+		if GenerateDQR.percent_miss(data[feature]) >= float(25) :
+			list_delete.append(feature)
+	print(list_delete)
+	for feature in list_delete:
+		if feature in feature_list:
+			feature_list.remove(feature)	
+	return feature_list, list_delete
+
 if (fromUrl):
-    #Reading the dataset from an online repository:
-    #-----------------------------------------------
-    fileUrl = 'https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data'
-    #define the list of column headings for the dataset. This list is based on the documentation
-    #for the dataset available at: 
-    #https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names
-    columnHeadings=['age','workclass','fnlwgt','education','education-num','marital-status','occupation','relationship','race','sex','capital-gain','capital-loss','hours-per-week','native-country','annualincome']
-    # we can directly use read_csv to download the file
-    data = pd.read_csv(fileUrl,header=None,names=columnHeadings,index_col=False,na_values=['?'],nrows=32560)
-    # save the file locally 
-    data.to_csv('../Datasets/censusDataRaw.csv',index=False)
+	#Reading the dataset from an online repository:
+	#-----------------------------------------------
+	fileUrl = 'https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data'
+	#define the list of column headings for the dataset. This list is based on the documentation
+	#for the dataset available at: 
+	#https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names
+	columnHeadings=['age','workclass','fnlwgt','education','education-num','marital-status','occupation','relationship','race','sex','capital-gain','capital-loss','hours-per-week','native-country','annualincome']
+	# we can directly use read_csv to download the file
+	data = pd.read_csv(fileUrl,header=None,names=columnHeadings,index_col=False,na_values=['?'],nrows=32560)
+	# save the file locally 
+	data.to_csv('../Datasets/censusDataRaw.csv',index=False)
 else:
-    #Reading the dataset from a local file
-    #---------------------------------------------
-    #censusData = pd.read_csv("../Datasets/censusDataRaw.csv",index_col=False,na_values=['?'],nrows=32560)
-    # Set your dataset path below:
-    path_dataset = "../Data/DataSet.csv"
-    # Read the data and separate continuous & categorical values:
-    data = pd.read_csv(path_dataset)
+	#Reading the dataset from a local file
+	#---------------------------------------------
+	#censusData = pd.read_csv("../Datasets/censusDataRaw.csv",index_col=False,na_values=['?'],nrows=32560)
+	# Set your dataset path below:
+	path_dataset = "../Data/DataSet.csv"
+	# Read the data and separate continuous & categorical values:
+	data = pd.read_csv(path_dataset)
 
 
 # Extract Target Feature
 targetLabels = data['target']
 # Extract Numeric Descriptive Features
 numeric_features = list(data.select_dtypes(exclude=['O']))
+numeric_features, numeric_features_drop = reject_to_misses(numeric_features, data)
 numeric_dfs = data[numeric_features]
 # Extract Categorical Descriptive Features
-cat_dfs = data.drop(numeric_features + ['target'],axis=1)
+list_categorical = list(data.select_dtypes(include=['O']))
+list_categorical, list_categorical_drop = reject_to_misses(list_categorical, data)
+cat_dfs = data.drop(numeric_features + ['target'] + list_categorical_drop,axis=1)
 # Remove missing values and apply one-hot encoding
 cat_dfs.replace('?','NA')
 cat_dfs.fillna( 'NA', inplace = True )
@@ -66,14 +91,36 @@ decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
 #fit the model using the numeric representations of the training data
 decTreeModel.fit(train_dfs, targetLabels)
 
-print(decTreeModel)
 
 #---------------------------------------------------------------
 #   Define 2 Queries, Make Predictions, Map Predictions to Levels
 #---------------------------------------------------------------
-"""
+#print(numeric_features)
+#print(list_categorical_drop)
+# ['age', 'industry code', 'occupation code', 'wage per hour', 'capital gains', 'capital losses', 'divdends from stocks', 'instance weight', 'num persons worked for employer', 'own business or self employed', 'veterans benefits', 'weeks worked in year', 'year'] 
+
+# ['class of worker', 'education', 'enrolled in edu inst last wk', 'marital status', 'major industry code', 'major occupation code', 'race', 'hispanic Origin', 'sex', 'member of a labor union', 'reason for unemployment', 'full or part time employment stat', 'tax filer status', 'region of previous residence', 'state of previous residence', 'detailed household and family stat', 'detailed household summary in household', 'live in this house 1 year ago', 'family members under 18', 'country of birth father', 'country of birth mother', 'country of birth self', 'citizenship', "fill inc questionnaire for veteran's admin", 'target']
+
+### TODO : FAIRE UNE QUERY
+
 q = {'age':[39,50],'workclass':['State-gov','Self-emp-not-inc'],'fnlwgt':[77516,83311],'education':['Bachelors','Bachelors'],'education-num':[13,13],'marital-status':['Never-married','Married-civ-spouse'],'occupation':['Adm-clerical','Exec-managerial'],'relationhip':['Not-in-family','Husband'],'race':['White','White'],'sex':['Male','Male'],'capital-gain':[2174,0],'capital-loss':[0,0],'hours-per-week':[40,13],'native_country':['United-States','United-States']}
-col_names = ['age','workclass','fnlwgt','education','education-num','marital-status','occupation','relationhip','race','sex','capital-gain','capital-loss','hours-per-week','native_country']
+
+
+col_names_tmp = itertools.chain(numeric_features,list_categorical)
+col_names = list()
+
+for i in col_names_tmp:
+	col_names.append(i)
+	#print(i)
+col_names.remove("target")
+visualize_tree(decTreeModel)
+
+"""
+for i in range(0, decTreeModel.n_classes_):
+	print(decTreeModel.tree_.best_error[i])
+"""
+
+"""
 qdf = pd.DataFrame.from_dict(q,orient="columns")
 #extract the numeric features
 q_num = qdf[numeric_features].as_matrix() 
@@ -121,12 +168,12 @@ plt.colorbar()
 plt.ylabel('True label')
 plt.xlabel('Predicted label')
 plt.show()
-"""
+
 
 #--------------------------------------------
 # Cross-validation to Compare to Models
 #--------------------------------------------
-"""
+
 #run a 10 fold cross validation on this model using the full census data
 scores=cross_validation.cross_val_score(decTreeModel2, instances_train, target_train, cv=10)
 #the cross validaton function returns an accuracy score for each fold

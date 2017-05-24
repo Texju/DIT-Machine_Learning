@@ -17,27 +17,19 @@ import pandas as pd
 import GenerateDQR
 import Information_Based_Learning_Part_1 as base1
 import itertools
-import subprocess
+import pydotplus
 
 fromUrl = False
 
 
-def visualize_tree(tree, feature_names):
-    with open("dt.dot", 'w') as f:
-        sklearn.tree.export_graphviz(tree, out_file=f,
-                        feature_names=feature_names)
-    command = ["dot", "-Tpng", "dt.dot", "-o", "dt.png"]
-    try:
-        subprocess.check_call(command)
-    except:
-        exit("Could not run dot, ie graphviz, to "
-             "produce visualization")
-
+def visualize_tree(tree):
+	dot_data = sklearn.tree.export_graphviz(tree, out_file=None)
+	graph = pydotplus.graph_from_dot_data(dot_data) 
+	graph.write_pdf("tree.pdf")
+	
 
 def reject_to_misses(feature_list, data):
 	list_delete = list()
-	## DEBUG
-	print(len(feature_list))
 	for feature in feature_list :
 		if GenerateDQR.percent_miss(data[feature]) >= float(25) :
 			list_delete.append(feature)
@@ -45,8 +37,6 @@ def reject_to_misses(feature_list, data):
 	for feature in list_delete:
 		if feature in feature_list:
 			feature_list.remove(feature)	
-	## DEBUG
-	print(len(feature_list))
 	return feature_list, list_delete
 
 if (fromUrl):
@@ -121,9 +111,10 @@ col_names = list()
 
 for i in col_names_tmp:
 	col_names.append(i)
-	print(i)
+	#print(i)
+col_names.remove("target")
+visualize_tree(decTreeModel)
 
-#visualize_tree(decTreeModel, col_names)
 """
 for i in range(0, decTreeModel.n_classes_):
 	print(decTreeModel.tree_.best_error[i])

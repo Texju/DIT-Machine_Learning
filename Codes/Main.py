@@ -1,6 +1,6 @@
 from Data import MLData
-
-data = MLData('../Data/DataSet.csv')
+from Tree import MLTree
+import sklearn
 
 """
 Data usage:
@@ -15,3 +15,22 @@ Data usage:
     unshuffle() Restore original data (not shuffled)
 """
 
+# Load data
+data = MLData('../Data/DataSet.csv')
+
+# Create tree
+tree = MLTree()
+tree.setTrainingData(data.Training)
+tree.Type="DecisionTree"
+tree.ignored_features = ["machin"]
+
+print("Creating tree")
+tree.learn()
+print("Creating tree visualization")
+dot_data = sklearn.tree.export_graphviz(tree.Tree, out_file="out.dot")
+#print("Creating dot file")
+#graph = pydotplus.graph_from_dot_data(dot_data) 
+#print("Creating pdf")
+#graph.write_pdf("tree.pdf")
+
+#print(data.Training)

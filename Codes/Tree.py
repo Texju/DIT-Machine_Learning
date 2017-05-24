@@ -11,10 +11,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 import numpy
 from sklearn import tree
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score
 
-
+# TODO : CalibratedClassifierCV fix it 
 # TODO : 
 """
 creates 3 different prediction models from the sci-kit library; for example, a decision tree, nearest neighbor, naive bayes models, random forest.

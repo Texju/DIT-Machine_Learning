@@ -16,12 +16,17 @@ Data usage:
     unshuffle() Restore original data (not shuffled)
 """
 
+# http://scikit-learn.org/stable/modules/cross_validation.html#cross-validation
+"""
+for each model created your program should run a 5 fold-crossvalidation and output the accuracy score for each fold
+"""
+
 # Load data
 data = MLData('../Data/DataSet.csv')
 
 # Create tree
 tree = MLTree()
-tree.setTrainingData(data.Training)
+tree.setTrainingData(data)
 tree.Type="DecisionTree"
 tree.ignored_features = [
         "industry code",    # duplicate of "major industry code"
@@ -30,10 +35,10 @@ tree.ignored_features = [
         ]
 
 print("Creating tree")
-tree.learn()
-tree_select = feature_selection.FeatureSelection(tree.Train_dfs, tree.Target)
-tree_select = tree_select.selection_chi2(4)
-print(tree_select.shape)
+train_dfs = tree.prepareData()
+tree_select = feature_selection.FeatureSelection(train_dfs, tree.Target)
+tree_select = tree_select.select_threshold(0.1)
+print(tree_select.dtype.names)
 #print("Creating tree visualization")
 #dot_data = sklearn.tree.export_graphviz(tree.Tree, out_file="out.dot")
 #print("Creating dot file")

@@ -1,6 +1,7 @@
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 from sklearn.feature_selection import SelectFromModel
+from sklearn.feature_selection import VarianceThreshold
 from sklearn.svm import LinearSVC
 
 class FeatureSelection(object):
@@ -19,6 +20,11 @@ class FeatureSelection(object):
 		"""
 		return SelectKBest(chi2, k=number_node).fit_transform(self.data, self.target)
 	
+	def select_threshold(self, threshold):
+		sel = VarianceThreshold(threshold=(threshold)) 
+		return sel.fit_transform(self.data)
+
+	## TODO : Correct bug 
 	def selection_classif(self):
 		return feature_selection.f_classif(self.data, self.target)
 

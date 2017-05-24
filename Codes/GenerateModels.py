@@ -12,10 +12,8 @@ from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 
-from sklearn.datasets import load_iris
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import chi2
 
+import FeatureSelection
 import sklearn
 import numpy as np
 import pandas as pd
@@ -56,7 +54,7 @@ def visualize_tree(tree, pdf = True):
 def reject_to_misses(feature_list, data):
 	list_delete = list()
 	for feature in feature_list :
-		if GenerateDQR.percent_miss(data[feature]) >= float(25) :
+		if GenerateDQR.percent_miss(data[feature]) >= float(.25) :
 			list_delete.append(feature)
 	print(list_delete)
 	for feature in list_delete:
@@ -89,11 +87,9 @@ vec_cat_dfs = vectorizer.fit_transform(cat_dfs)
 # Merge Categorical and Numeric Descriptive Features
 train_dfs = np.hstack((numeric_dfs.as_matrix(), vec_cat_dfs ))
 
-print(train_dfs.shape)
-print(train_dfs.target)
-train_dfs_new = SelectKBest(chi2, k=2).fit_transform(train_dfs, targetLabels)
-print(train_dfs_new.shape)
-
+new_train = FeatureSelection.FeatureSelection(train_dfs, targetLabels)
+result = new_train.selection_classif()
+print(result.shape)
 
 #K-Folds cross-validator
 #model_selection.KFold([n_splits, shuffle, ...]) 	
@@ -120,7 +116,7 @@ print(train_dfs_new.shape)
 #Time Series cross-validator
 #model_selection.TimeSeriesSplit([n_splits]) 	
 
-print(model)
+#print(model)
 
 
 #---------------------------------------------------------------

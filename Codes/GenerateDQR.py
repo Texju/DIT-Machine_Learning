@@ -48,10 +48,11 @@ def percent_miss(list_cat):
 	nb_elem = 0
 	for elem in list_cat:
 		nb_elem = nb_elem + 1
-		if elem == " ?":
+		elem = str(elem)
+		if elem == " ?" or elem.find("Not in universe") != -1 :
 			percent = percent + 1
-	percent = (percent * 100) /  nb_elem
-	percent = round(percent,2)
+	percent = (percent ) /  nb_elem
+	percent = round(percent,4)
 	return percent
 
 def traitement_continuous(list_continuous, data): 
@@ -83,11 +84,11 @@ def traitement_continuous(list_continuous, data):
 		dict_continuous["Card"].append(len(set(current)))
 		dict_continuous["Min"].append(min(current))
 		dict_continuous["1 Qrt"].append(numpy.percentile(current, 25))
-		dict_continuous["Mean"].append(round(numpy.mean(current),2))
+		dict_continuous["Mean"].append(round(numpy.mean(current),4))
 		dict_continuous["Median"].append(numpy.median(current))
 		dict_continuous["2 Qrt"].append(numpy.percentile(current, 75))
 		dict_continuous["Max"].append(max(current))
-		dict_continuous["Std Dev"].append(round(current.std(),2))
+		dict_continuous["Std Dev"].append(round(current.std(),4 ))
 
 	table = pandas.DataFrame.from_dict(dict_continuous)
 	return table
@@ -120,10 +121,10 @@ def traitement_categorical(list_categorical, data):
 		dict_categorical["Card"].append(len(set(current)))
 		dict_categorical["Mode"].append(first_mode)
 		dict_categorical["Mode Freq"].append((mode_occurences[first_mode]))
-		dict_categorical["Mode %"].append(round(((mode_occurences[first_mode] / len(data)) * 100),2))
+		dict_categorical["Mode %"].append(round(((mode_occurences[first_mode] / len(data))),4))
 		dict_categorical["2nd Mode"].append((mode_second))
 		dict_categorical["2nd Mode Freq"].append((mode_occurences[mode_second]))
-		dict_categorical["2nd Mode %"].append(round(((mode_occurences[mode_second] / len(data)) * 100),2))
+		dict_categorical["2nd Mode %"].append(round(((mode_occurences[mode_second] / len(data))),4))
 		
 	table = pandas.DataFrame.from_dict(dict_categorical)
 	return table

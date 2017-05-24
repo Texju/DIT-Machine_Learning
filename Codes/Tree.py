@@ -51,31 +51,21 @@ class MLTree:
             # Extract Target Feature
             targetLabels = self.__data['target']
             
-            # List of wrong feature in numerical 
+            # List of features with numerical values but must be considered as categorical features
             list_wrong_categories = ["year", "industry code", "occupation code", "own business or self employed", "veterans benefits" ]
 
-            # Extract feature numeric 
+            # Extract numeric feature list
             numeric_features = list(self.__data.select_dtypes(exclude=['O']))
 
-            # Delete from feature numeric wrong feature
+            # Delete from numeric feature list the features which must be considered as categorical features
             for cat in list_wrong_categories:
                 numeric_features.remove(cat)
 
-
-            # Extract feature categorical feature 
+            # Extract Categorical Descriptive Features
             categorical_dfs = self.__data.drop(numeric_features + ['target'],axis=1)
-
 
             # Extract Numeric Descriptive Features
             numeric_dfs = self.__data[numeric_features]
-            
-            # Extract Categorical Descriptive Features
-            #categorical_features = list(self.__data.select_dtypes(include=['O']))
-            
-            
-            
-
-            
 
             # Remove missing values and apply one-hot encoding
             categorical_dfs.replace('?','NA')

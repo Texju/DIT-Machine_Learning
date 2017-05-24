@@ -17,7 +17,7 @@ class MLTree:
         self.__data = []
         self.__tree = None
         self.__target = None
-        self.__train_dfs = None
+        self.__train_dfs = []
         
     @property
     def ignored_features(self):
@@ -54,8 +54,7 @@ class MLTree:
             self.__treeType = treeType
         else:
             raise ValueError('Tree type not implemented (yet?)')
-            
-    def learn(self):
+    def prepareData(self):
         if len(self.__data) != 0:
             # Extract Target Feature
             self.__target = self.__data['target']
@@ -90,8 +89,14 @@ class MLTree:
             vectorizer = DictVectorizer( sparse = False )
             vec_cat_dfs = vectorizer.fit_transform(categorical_dfs) 
             # Merge Categorical and Numeric Descriptive Features
-            self.__train_dfs = numpy.hstack((numeric_dfs.as_matrix(), vec_cat_dfs ))
-    
+            self.__train_dfs = numpy.hstack((numeric_dfs.as_matrix(), vec_cat_dfs))
+            
+            return self.__train_dfs
+        else:
+            raise ValueError('Training data not set.')
+        
+    def learn(self):
+        if len(self.__train_dfs) != 0:
             if self.__treeType == "DecisionTree":
                 decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
                 
@@ -104,6 +109,7 @@ class MLTree:
             decTreeModel.fit(self.__train_dfs, self.__target)
             
             self.__tree = decTreeModel
+            
+            return self.__tree
         else:
-            raise ValueError('Training data not set.')
-        
+            raise ValueError('Training data not prepared.')

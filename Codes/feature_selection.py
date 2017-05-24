@@ -20,5 +20,7 @@ class FeatureSelection(object):
 		return SelectKBest(chi2, k=number_node).fit_transform(self.data, self.target)
 	
 	def selection_classif(self):
-		return f_classif(self.data, self.target)
+		return feature_selection.f_classif(self.data, self.target)
+
+	
 		

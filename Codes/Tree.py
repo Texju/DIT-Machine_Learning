@@ -17,6 +17,7 @@ class MLTree:
         self.__data = []
         self.__tree = None
         self.__target = None
+        self.__train_dfs = None
         
     @property
     def ignored_features(self):
@@ -39,7 +40,10 @@ class MLTree:
     @property
     def Target(self):
         return self.__target
-    
+    @property
+    def Train_dfs(self):
+        return self.__train_dfs
+
     @property
     def Type(self):
         return self.__treeType
@@ -86,7 +90,7 @@ class MLTree:
             vectorizer = DictVectorizer( sparse = False )
             vec_cat_dfs = vectorizer.fit_transform(categorical_dfs) 
             # Merge Categorical and Numeric Descriptive Features
-            train_dfs = numpy.hstack((numeric_dfs.as_matrix(), vec_cat_dfs ))
+            self.__train_dfs = numpy.hstack((numeric_dfs.as_matrix(), vec_cat_dfs ))
     
             if self.__treeType == "DecisionTree":
                 decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
@@ -97,7 +101,7 @@ class MLTree:
             #create an instance of a decision tree model.
             
             #fit the model using the numeric representations of the training data
-            decTreeModel.fit(train_dfs, self.__target)
+            decTreeModel.fit(self.__train_dfs, self.__target)
             
             self.__tree = decTreeModel
         else:

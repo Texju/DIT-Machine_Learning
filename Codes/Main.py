@@ -28,7 +28,7 @@ data = MLData('../Data/DataSet.csv')
 # Create tree
 tree = MLTree()
 tree.setTrainingData(data)
-tree.Type="DecisionTreeEntropy"
+tree.Type="GaussianNB"
 tree.ignored_features = [
         "industry code",    # duplicate of "major industry code"
         "occupation code",  # duplicate of "major occupation code"
@@ -41,13 +41,13 @@ print("Creating tree")
 # Hold-out Test Set + Confusion Matrix
 #--------------------------------------------
 print("Learn ")
-decTree = tree.learn()
+tree.learn()
 print("Test ")
 #Split the data: 60% training : 40% test set
 #instances_train, instances_test, target_train, target_test = train_test_split(train_dfs, tree.Target, test_size=0.4, random_state=0)
 #fit the model using just the test set
 
-display.visualize_tree(decTree, True)
+display.visualize_tree(tree, True)
 
 validation = MLValidation(tree)
 
@@ -56,7 +56,7 @@ validation.test(data)
 print("Accuracy : " + str(validation.accuracy()))
 print(validation.confusionMatrix())
 display.disp_confusion_mat(validation.confusionMatrix())
-
+""" prendre autant de 0 que de 1 en prédiction """ 
 
 """
 tree_select = feature_selection.FeatureSelection(train_dfs, tree.Target)

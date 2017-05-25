@@ -14,6 +14,8 @@ import copy
 from sklearn import tree
 
 # TODO : CalibratedClassifierCV fix it 
+# OneClassSVN http://scikit-learn.org/stable/auto_examples/applications/plot_outlier_detection_housing.html#sphx-glr-auto-examples-applications-plot-outlier-detection-housing-py
+#http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
 # TODO : 
 """
 creates 3 different prediction models from the sci-kit library; for example, a decision tree, nearest neighbor, naive bayes models, random forest.
@@ -184,6 +186,8 @@ class MLTree:
                 print("Number of mislabeled points out of a total %d points : %d"
                 ...       % (iris.data.shape[0],(iris.target != y_pred).sum()))
                 """ 
+            
+            
 
         else:
             raise ValueError('Training data not prepared.')

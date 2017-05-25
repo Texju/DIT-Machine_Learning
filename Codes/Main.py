@@ -25,13 +25,13 @@ print("Load data")
 print("______________________________")
 # Load data
 data = MLData('../Data/DataSet.csv')
-
+"""
 # Create tree
 tree = MLTree()
 tree.setTrainingData(data)
-tree.Type="LinearRegression"
+tree.Type="MLP"
 tree.ignored_features = [ # see notebook for uncommented reasons
-        "wage per jour",
+        "wage per hour",
         "capital gains",
         "capital losses",
         "dividends from stocks",
@@ -104,7 +104,7 @@ print("Accuracy : " + str(validation.accuracy()))
 print("F1 score : " + str(validation.accuracy_harmonic()))
 print(validation.confusionMatrix())
 display.disp_confusion_mat(validation.confusionMatrix())
-
+"""
 
 """
 tree_select = feature_selection.FeatureSelection(train_dfs, tree.Target)

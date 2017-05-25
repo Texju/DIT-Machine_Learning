@@ -28,7 +28,7 @@ data = MLData('../Data/DataSet.csv')
 # Create tree
 tree = MLTree()
 tree.setTrainingData(data)
-tree.Type="GaussianNB"
+tree.Type="LinearRegression"
 tree.ignored_features = [
         "industry code",    # duplicate of "major industry code"
         "occupation code",  # duplicate of "major occupation code"

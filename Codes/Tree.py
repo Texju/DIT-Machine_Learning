@@ -133,61 +133,22 @@ class MLTree:
         
         if len(self.__train_dfs) != 0:
             #---------------------------------------------------------------
-            #   Create and train a decision tree model using sklearn api
+            #   Create and train a tree model using sklearn api
             #---------------------------------------------------------------
-            #create an instance of a decision tree model.
+            #create an instance of a tree model.
 
             if self.__treeType == "DecisionTreeEntropy":
-                decTreeModel = tree.DecisionTreeClassifier(criterion='entropy')
-                #fit the model using the numeric representations of the training data
-                decTreeModel.fit(self.__train_dfs, self.__target)
-                self.__tree = decTreeModel
-                return self.__tree
-
+                self.__tree = tree.DecisionTreeClassifier(criterion='entropy')
             elif self.__treeType == "DecisionTreeGini":
-                decTreeModel = tree.DecisionTreeClassifier(criterion='gini')
-                #fit the model using the numeric representations of the training data
-                decTreeModel.fit(self.__train_dfs, self.__target)
-                self.__tree = decTreeModel
-                return self.__tree   
-            #---------------------------------------------------------------
-            #   Create and train a decision tree model using sklearn api
-            #---------------------------------------------------------------
-            #create an instance of a Random Forest tree model.
-            
+                self.__tree = tree.DecisionTreeClassifier(criterion='gini')
             elif self.__treeType == "RandomForest":
-                # Train random forest classifier, calibrate on validation data and evaluate
-                # on test data
-
-                train_dfsV, targetV = self.prepareData(self.__data[1])
-                train_dfsT, sargetT = self.prepareData(self.__data[2])
-                
-                clf = RandomForestClassifier(n_estimators=25)
-                clf.fit(self.__train_dfs, self.__target)
-                self.__tree = clf
-                """
-                ## For validation
-                clf_probs = clf.predict_proba(train_dfsT)
-                sig_clf = CalibratedClassifierCV(clf, method="sigmoid", cv="prefit")
-                sig_clf.fit(train_dfsV, targetV)
-                
-                ## for test
-                sig_clf_probs = sig_clf.predict_proba(train_dfsT)
-                sig_score = log_loss(targetT, sig_clf_probs)
-                """
-                return self.__tree
-                
+                self.__tree  = RandomForestClassifier(n_estimators=25)
             elif self.__treeType == "GaussianNB":
-                gnb = GaussianNB()
-                gnb.fit(self.__train_dfs, self.__target)
-                self.__tree = gnb
-                return self.__tree 
-                """
-                print("Number of mislabeled points out of a total %d points : %d"
-                ...       % (iris.data.shape[0],(iris.target != y_pred).sum()))
-                """ 
+                self.__tree  = GaussianNB()
             
-            
+            #fit the model using the numeric representations of the training data
+            self.__tree.fit(self.__train_dfs, self.__target)
+            return self.__tree
 
         else:
             raise ValueError('Training data not prepared.')

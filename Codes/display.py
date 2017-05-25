@@ -2,8 +2,6 @@ import matplotlib.pyplot as plt
 import sklearn
 import pydotplus
 
-
-
 def disp_confusion_mat(conf_mat):
 	"""Draw the confusion matrix
 	Show confusion matrix in a separate window

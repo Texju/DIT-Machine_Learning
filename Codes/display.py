@@ -21,13 +21,13 @@ def visualize_tree(tree, pdf = True):
 	print("Creating out for decision tree")
 	path = "../Results/tree.pdf"
 	if tree.Type == "DecisionTreeEntropy" or tree.Type == "DecisionTreeGini" : 
-		if pdf : 
+		"""if pdf : 
 			dot_data = sklearn.tree.export_graphviz(tree, out_file=None)
 			graph = pydotplus.graph_from_dot_data(dot_data) 
 			graph.write_pdf(path)
 			print("pdf is here : "+path)
 		else :
-			dot_data = sklearn.tree.export_graphviz(tree, out_file="tree.dot")
+			dot_data = sklearn.tree.export_graphviz(tree, out_file="tree.dot")"""
 	else :
 		print("Impossible you don't use a DecisionTree sorry")
 		print('Alright')

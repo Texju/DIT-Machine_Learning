@@ -46,9 +46,7 @@ class MLTree:
         categorical_dfs = data.Raw.select_dtypes(include=['O'])
         categorical_dfs = categorical_dfs.T.to_dict().values()
         self.__vectorizer.fit(categorical_dfs)
-        
-        if(debug == True):
-            print(self.__data[0])
+
         self.__data[0].drop(self.__ignore)
         self.__data[1].drop(self.__ignore)
         self.__data[2].drop(self.__ignore)

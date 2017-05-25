@@ -28,11 +28,30 @@ data = MLData('../Data/DataSet.csv')
 # Create tree
 tree = MLTree()
 tree.setTrainingData(data)
-tree.Type="GaussianNB"
-tree.ignored_features = [
+tree.Type="RandomForest"
+tree.ignored_features = [ # see notebook for uncommented reasons
+        "wage per jour",
+        "capital gains",
+        "capital losses",
+        "dividends from stocks",
+        "instance weight",
+        "class of worker",
         "industry code",    # duplicate of "major industry code"
         "occupation code",  # duplicate of "major occupation code"
+        "enrolled in edu inst last wk",
+        "major industry code",
+        "major occupation code",
+        "member of a labor union",
+        "reason for unemployment",
+        "region of previous residence",
+        "state of previous residence",
         "detailed household summary in household", # duplicate of "detailed household and family stat" with less info
+        "migration code-change in msa",
+        "migration code-change in reg",
+        "migration code-move within reg",
+        "migration prev res in sunbelt",
+        "family members under 18",
+        "fill inc questionnaire for veteran's admin"
         ]
 
 print("Creating tree")
@@ -54,6 +73,7 @@ validation = MLValidation(tree)
 validation.test(data)
 
 print("Accuracy : " + str(validation.accuracy()))
+print("F1 score : " + str(validation.accuracy_harmonic()))
 print(validation.confusionMatrix())
 display.disp_confusion_mat(validation.confusionMatrix())
 """ prendre autant de 0 que de 1 en prédiction """ 

@@ -1,5 +1,5 @@
 from sklearn import metrics
-import sys
+import numpy
 
 class MLValidation:
     """This class calculates the preciseness of our tree against a set of data"""
@@ -35,3 +35,12 @@ class MLValidation:
     def accuracy(self):
         return metrics.accuracy_score(self.__targets, self.__predictions, normalize=True)
     
+    def accuracy_harmonic(self):
+        t = self.__targets.replace(" - 50000.","yes")
+        t = t.replace(" 50000+.","no")
+        
+        p = numpy.copy(self.__predictions)
+        p[p == " - 50000."] = "yes"
+        p[p == " 50000+."] = "no"
+        
+        return metrics.f1_score(t, p, pos_label="yes")

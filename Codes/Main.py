@@ -21,24 +21,36 @@ Data usage:
 for each model created your program should run a 5 fold-crossvalidation and output the accuracy score for each fold
 """
 
-
+print("Load data")
+print("______________________________")
 # Load data
 data = MLData('../Data/DataSet.csv')
 
-print("Creating tree")
+
 # DecisionTreeEntropy DecisionTreeGini RandomForest GaussianNB OCSVM SVC LinearRegression
-list_classifier = ["DecisionTreeEntropy", "DecisionTreeGini", "RandomForest", "GaussianNB", "OCSVM", "SVC", "LinearRegression"]
+#  , "OCSVM", "SVC", "LinearRegression"
+list_classifier = ["DecisionTreeEntropy", "DecisionTreeGini", "RandomForest", "GaussianNB"]
 dict_classifier = {}
 for classifier in list_classifier :
+    print("Creating tree"+ classifier)
     # Create tree 
-    dict_classifier[classifier] = MLTree()
-    dict_classifier[classifier].setTrainingData(data)
-    dict_classifier[classifier].Type="LinearRegression"
-    dict_classifier[classifier].ignored_features = [
+    dict_classifier[classifier] = list()
+    dict_classifier[classifier].append(MLTree())
+    dict_classifier[classifier][0].setTrainingData(data)
+    dict_classifier[classifier][0].Type=classifier
+    dict_classifier[classifier][0].ignored_features = [
             "industry code",    # duplicate of "major industry code"
             "occupation code",  # duplicate of "major occupation code"
             "detailed household summary in household", # duplicate of "detailed household and family stat" with less info
             ]
+    print("Learn "+classifier)
+    dict_classifier[classifier][0].learn()
+    print("Test "+classifier)
+    dict_classifier[classifier].append(MLValidation(dict_classifier[classifier][0]))
+    dict_classifier[classifier][1].test(data)
+    print("______________________________")
+
+display.comparasion_result(dict_classifier, data)
 
 
 """

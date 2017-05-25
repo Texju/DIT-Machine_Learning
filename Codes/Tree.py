@@ -144,7 +144,6 @@ class MLTree:
             #   Create and train a tree model using sklearn api
             #---------------------------------------------------------------
             #create an instance of a tree model.
-
             if self.__treeType == "DecisionTreeEntropy":
                 self.__tree = tree.DecisionTreeClassifier(criterion='entropy')
             elif self.__treeType == "DecisionTreeGini":

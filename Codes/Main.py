@@ -21,7 +21,8 @@ Data usage:
 for each model created your program should run a 5 fold-crossvalidation and output the accuracy score for each fold
 """
 
-
+print("Load data")
+print("______________________________")
 # Load data
 data = MLData('../Data/DataSet.csv')
 
@@ -54,7 +55,34 @@ tree.ignored_features = [ # see notebook for uncommented reasons
         "fill inc questionnaire for veteran's admin"
         ]
 
-print("Creating tree")
+"""
+# DecisionTreeEntropy DecisionTreeGini RandomForest GaussianNB OCSVM SVC LinearRegression
+#  , "OCSVM", "SVC", "LinearRegression"
+list_classifier = ["DecisionTreeEntropy", "DecisionTreeGini", "RandomForest", "GaussianNB"]
+dict_classifier = {}
+for classifier in list_classifier :
+    print("Creating tree"+ classifier)
+    # Create tree 
+    dict_classifier[classifier] = list()
+    dict_classifier[classifier].append(MLTree())
+    dict_classifier[classifier][0].setTrainingData(data)
+    dict_classifier[classifier][0].Type=classifier
+    dict_classifier[classifier][0].ignored_features = [
+            "industry code",    # duplicate of "major industry code"
+            "occupation code",  # duplicate of "major occupation code"
+            "detailed household summary in household", # duplicate of "detailed household and family stat" with less info
+            ]
+    print("Learn "+classifier)
+    dict_classifier[classifier][0].learn()
+    print("Test "+classifier)
+    dict_classifier[classifier].append(MLValidation(dict_classifier[classifier][0]))
+    dict_classifier[classifier][1].test(data)
+    print("______________________________")
+
+display.comparasion_result(dict_classifier, data)
+
+
+"""
 
 #--------------------------------------------
 # Hold-out Test Set + Confusion Matrix
@@ -66,7 +94,7 @@ print("Test ")
 #instances_train, instances_test, target_train, target_test = train_test_split(train_dfs, tree.Target, test_size=0.4, random_state=0)
 #fit the model using just the test set
 
-display.visualize_tree(tree, True)
+#display.visualize_tree(tree, True)
 
 validation = MLValidation(tree)
 
@@ -76,6 +104,7 @@ print("Accuracy : " + str(validation.accuracy()))
 print("F1 score : " + str(validation.accuracy_harmonic()))
 print(validation.confusionMatrix())
 display.disp_confusion_mat(validation.confusionMatrix())
+"""
 """ prendre autant de 0 que de 1 en prédiction """ 
 
 """

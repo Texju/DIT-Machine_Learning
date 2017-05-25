@@ -25,17 +25,23 @@ for each model created your program should run a 5 fold-crossvalidation and outp
 # Load data
 data = MLData('../Data/DataSet.csv')
 
-# Create tree
-tree = MLTree()
-tree.setTrainingData(data)
-tree.Type="LinearRegression"
-tree.ignored_features = [
-        "industry code",    # duplicate of "major industry code"
-        "occupation code",  # duplicate of "major occupation code"
-        "detailed household summary in household", # duplicate of "detailed household and family stat" with less info
-        ]
-
 print("Creating tree")
+# DecisionTreeEntropy DecisionTreeGini RandomForest GaussianNB OCSVM SVC LinearRegression
+list_classifier = ["DecisionTreeEntropy", "DecisionTreeGini", "RandomForest", "GaussianNB", "OCSVM", "SVC", "LinearRegression"]
+dict_classifier = {}
+for classifier in list_classifier :
+    # Create tree 
+    dict_classifier[classifier] = MLTree()
+    dict_classifier[classifier].setTrainingData(data)
+    dict_classifier[classifier].Type="LinearRegression"
+    dict_classifier[classifier].ignored_features = [
+            "industry code",    # duplicate of "major industry code"
+            "occupation code",  # duplicate of "major occupation code"
+            "detailed household summary in household", # duplicate of "detailed household and family stat" with less info
+            ]
+
+
+"""
 
 #--------------------------------------------
 # Hold-out Test Set + Confusion Matrix
@@ -56,6 +62,7 @@ validation.test(data)
 print("Accuracy : " + str(validation.accuracy()))
 print(validation.confusionMatrix())
 display.disp_confusion_mat(validation.confusionMatrix())
+"""
 """ prendre autant de 0 que de 1 en prédiction """ 
 
 """

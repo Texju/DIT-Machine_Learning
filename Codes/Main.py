@@ -1,6 +1,7 @@
 from Data import MLData
 from Tree import MLTree
 from validation import MLValidation
+import display
 
 """
 Data usage:
@@ -20,13 +21,14 @@ Data usage:
 for each model created your program should run a 5 fold-crossvalidation and output the accuracy score for each fold
 """
 
+
 # Load data
 data = MLData('../Data/DataSet.csv')
 
 # Create tree
 tree = MLTree()
 tree.setTrainingData(data)
-tree.Type="GaussianNB"
+tree.Type="DecisionTreeEntropy"
 tree.ignored_features = [
         "industry code",    # duplicate of "major industry code"
         "occupation code",  # duplicate of "major occupation code"
@@ -39,11 +41,13 @@ print("Creating tree")
 # Hold-out Test Set + Confusion Matrix
 #--------------------------------------------
 print("Learn ")
-tree.learn()
+decTree = tree.learn()
 print("Test ")
 #Split the data: 60% training : 40% test set
 #instances_train, instances_test, target_train, target_test = train_test_split(train_dfs, tree.Target, test_size=0.4, random_state=0)
 #fit the model using just the test set
+
+display.visualize_tree(decTree, True)
 
 validation = MLValidation(tree)
 
@@ -51,18 +55,9 @@ validation.test(data)
 
 print("Accuracy : " + str(validation.accuracy()))
 print(validation.confusionMatrix())
-"""
-#Draw the confusion matrix
-import matplotlib.pyplot as plt
-# Show confusion matrix in a separate window
-plt.matshow(validation.confusionMatrix)
-plt.plot(confusionMatrix)
-plt.title('Confusion matrix')
-plt.colorbar()
-plt.ylabel('True label')
-plt.xlabel('Predicted label')
-plt.show()
-"""
+display.disp_confusion_mat(validation.confusionMatrix())
+
+
 """
 tree_select = feature_selection.FeatureSelection(train_dfs, tree.Target)
 tree_select = tree_select.select_threshold(0.1)

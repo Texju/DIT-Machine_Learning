@@ -9,7 +9,7 @@ class MLMain:
         print("______________________________")
         # Load data
         self.__data = MLData('../Data/DataSet.csv')
-    
+
         # Create tree
         tree = MLTree()
     

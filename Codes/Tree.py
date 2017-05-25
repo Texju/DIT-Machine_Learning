@@ -8,6 +8,7 @@ Created on Wed May 24 15:00:15 2017
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
+from sklearn.neural_network import MLPClassifier
 import numpy
 from sklearn import tree
 
@@ -69,6 +70,8 @@ class MLTree:
         elif treeType == "RandomForest":
             self.__treeType = treeType
         elif treeType == "GaussianNB":
+            self.__treeType = treeType
+        elif treeType == "MLP":
             self.__treeType = treeType
         else:
             raise ValueError('Tree type not implemented (yet?)')
@@ -132,11 +135,13 @@ class MLTree:
                 self.__tree  = RandomForestClassifier(n_estimators=25)
             elif self.__treeType == "GaussianNB":
                 self.__tree = GaussianNB()
-                
+            elif self.__treeType == "MLP":
+                self.__tree = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(10,50), random_state=1)
+
             if dontFit == False:
                 #fit the model using the numeric representations of the training data
                 self.__tree.fit(self.__train_dfs, self.__target)
-                
+
             return self.__tree
 
         else:

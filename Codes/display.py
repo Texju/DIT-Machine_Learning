@@ -14,7 +14,6 @@ from sklearn.calibration import calibration_curve
 # TODO : http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_iris.html#sphx-glr-auto-examples-ensemble-plot-forest-iris-py
 
 
-
 def disp_confusion_mat(conf_mat):
 	"""Draw the confusion matrix
 	Show confusion matrix in a separate window

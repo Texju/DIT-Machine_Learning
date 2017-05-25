@@ -9,15 +9,10 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.neighbors import NearestNeighbors
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
-from sklearn.svm import OneClassSVM, SVC
-from sklearn.linear_model import LinearRegression
 import numpy
 import copy
 from sklearn import tree
 
-# TODO : CalibratedClassifierCV fix it 
-# OneClassSVN http://scikit-learn.org/stable/auto_examples/applications/plot_outlier_detection_housing.html#sphx-glr-auto-examples-applications-plot-outlier-detection-housing-py
-#http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
 # TODO : 
 """
 creates 3 different prediction models from the sci-kit library; for example, a decision tree, nearest neighbor, naive bayes models, random forest.
@@ -82,12 +77,6 @@ class MLTree:
             self.__treeType = treeType
         elif treeType == "GaussianNB":
             self.__treeType = treeType
-        elif treeType == "OCSVM":
-            self.__treeType = treeType
-        elif treeType == "SVC" :
-            self.__treeType = treeType 
-        elif treeType == "LinearRegression":
-            self.__treeType = treeType 
         else:
             raise ValueError('Tree type not implemented (yet?)')
             
@@ -150,12 +139,6 @@ class MLTree:
                 self.__tree  = RandomForestClassifier(n_estimators=25)
             elif self.__treeType == "GaussianNB":
                 self.__tree = GaussianNB()
-            elif self.__treeType == "OCSVM" : 
-                self.__tree = OneClassSVM()
-            elif self.__treeType == "SVC" : 
-                self.__tree = SVC()
-            elif self.__treeType == "LinearRegression":
-                self.__tree = LinearRegression()
             #fit the model using the numeric representations of the training data
             self.__tree.fit(self.__train_dfs, self.__target)
             return self.__tree

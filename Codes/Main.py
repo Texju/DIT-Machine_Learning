@@ -29,7 +29,7 @@ data = MLData('../Data/DataSet.csv')
 # Create tree
 tree = MLTree()
 tree.setTrainingData(data)
-tree.Type="RandomForest"
+tree.Type="LinearRegression"
 tree.ignored_features = [ # see notebook for uncommented reasons
         "wage per jour",
         "capital gains",
@@ -104,8 +104,7 @@ print("Accuracy : " + str(validation.accuracy()))
 print("F1 score : " + str(validation.accuracy_harmonic()))
 print(validation.confusionMatrix())
 display.disp_confusion_mat(validation.confusionMatrix())
-"""
-""" prendre autant de 0 que de 1 en prédiction """ 
+
 
 """
 tree_select = feature_selection.FeatureSelection(train_dfs, tree.Target)

@@ -1,7 +1,19 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed May 24 15:00:15 2017
+
+@author: Julien Couillard & Jean Thevenet
+"""
+
 import matplotlib.pyplot as plt 
 import sklearn
 import pydotplus
 from sklearn.calibration import calibration_curve
+
+# TODO : http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html#sphx-glr-auto-examples-classification-plot-classifier-comparison-py 
+# TODO : http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_iris.html#sphx-glr-auto-examples-ensemble-plot-forest-iris-py
+
+
 
 def disp_confusion_mat(conf_mat):
 	"""Draw the confusion matrix
@@ -34,7 +46,8 @@ def visualize_tree(tree, pdf = True):
 		print('Alright')
 
 def comparasion_result(dict_classifier, data):
-	# http://scikit-learn.org/stable/auto_examples/calibration/plot_compare_calibration.html#sphx-glr-auto-examples-calibration-plot-compare-calibration-py
+	"""Display a comparaison of differents classifiers
+	"""
 	plt.figure(figsize=(10, 10))
 	ax1 = plt.subplot2grid((3, 1), (0, 0), rowspan=2)
 	ax2 = plt.subplot2grid((3, 1), (2, 0))

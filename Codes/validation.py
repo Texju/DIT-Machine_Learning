@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed May 24 15:00:15 2017
+
+@author: Julien Couillard & Jean Thevenet
+"""
+
 from sklearn import metrics
 import numpy
 

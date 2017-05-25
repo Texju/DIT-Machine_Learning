@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed May 24 12:22:41 2017
+Created on Wed May 24 15:00:15 2017
 
-@author: Jean Thevenet
+@author: Julien Couillard & Jean Thevenet
 """
 
 import copy

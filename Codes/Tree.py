@@ -6,18 +6,11 @@ Created on Wed May 24 15:00:15 2017
 """
 
 from sklearn.feature_extraction import DictVectorizer
-from sklearn.neighbors import NearestNeighbors
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 import numpy
-import copy
 from sklearn import tree
 
-# TODO : 
-"""
-creates 3 different prediction models from the sci-kit library; for example, a decision tree, nearest neighbor, naive bayes models, random forest.
-
-"""
 class MLTree:
     """This class create a tree from the data"""
     def __init__(self):
@@ -44,9 +37,9 @@ class MLTree:
         categorical_dfs = categorical_dfs.T.to_dict().values()
         self.__vectorizer.fit(categorical_dfs)
 
-        self.__data[0].drop(self.__ignore)
-        self.__data[1].drop(self.__ignore)
-        self.__data[2].drop(self.__ignore)
+        self.__data[0].drop(self.__ignore, 1)
+        self.__data[1].drop(self.__ignore, 1)
+        self.__data[2].drop(self.__ignore, 1)
 
     @property
     def Tree(self):
@@ -123,7 +116,7 @@ class MLTree:
         else:
             raise ValueError('Data not set.')
 
-    def learn(self):
+    def learn(self, dontFit = False):
         self.__train_dfs, self.__target = self.prepareData(self.__data[0])
         
         if len(self.__train_dfs) != 0:
@@ -139,8 +132,11 @@ class MLTree:
                 self.__tree  = RandomForestClassifier(n_estimators=25)
             elif self.__treeType == "GaussianNB":
                 self.__tree = GaussianNB()
-            #fit the model using the numeric representations of the training data
-            self.__tree.fit(self.__train_dfs, self.__target)
+                
+            if dontFit == False:
+                #fit the model using the numeric representations of the training data
+                self.__tree.fit(self.__train_dfs, self.__target)
+                
             return self.__tree
 
         else:

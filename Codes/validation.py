@@ -4,7 +4,7 @@ Created on Wed May 24 15:00:15 2017
 
 @author: Julien Couillard & Jean Thevenet
 """
-
+from sklearn import cross_validation
 from sklearn import metrics
 import numpy
 
@@ -29,6 +29,12 @@ class MLValidation:
 
         #Use the model to make predictions for the test set queries
         self.__predictions = self.__tree.Tree.predict(instances_test)
+
+    def test_KFoldCrossValidation(self, data, k):
+        instances_train, target_train = self.__tree.prepareData(data.Raw)
+        scores=cross_validation.cross_val_score(self.__tree.Tree, instances_train, target_train, cv=k)
+        
+        return scores
 
     def testNaiveAlwaysYes(self, data):
         """ Test our targets against a matrix that always return - 50000"""

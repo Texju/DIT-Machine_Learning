@@ -70,7 +70,11 @@ slidenumbers: true
 ![fit](./Doc/second_result.png)
 
 ---
- 
+
+![fit](./Doc/table.png)
+
+---
+
 # Jazz
  
 - Everything designed using an easy to use launcher & object-based code.

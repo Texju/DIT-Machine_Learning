@@ -2,7 +2,7 @@ footer: Julien Couillard, Gwendal Rio, Jean Thévenet
 slidenumbers: true
 
 # Machine Learning
-## With a dataset about income 
+## Determining income 
 
 ---
 
@@ -19,22 +19,26 @@ slidenumbers: true
 
 # Dataset Description
 
-- Weighted census data. 
-- Extracted from the 1994 and 1995. 
-- Current Population Surveys conducted by the U.S. Census Bureau. 
-- The data contains 41 demographic and employment related variables. 
+- Gathered during a survey between the years 1994-1995. 
+- Goal: find a correlation between income and people's status.
+- Contains 199523 survey responses from U.S. population.
+- 41 demographic and employment related questions.
 
 ---
 
 # Data Quality Report and Analysis
 
-- Lot of data are missing. 
-- We have doblons data.
-- Need to chose good features.
+- 40 features 
+- A lot of missing informations. 
+- Some duplicated features (numerical indexes vs. words).
+- Priority : select the best features.
 
 ---
 
 # Data Handling
+
+- 18 features ignored based on misses and duplicate rates.
+- Used a default of 50%, 20%, 30% split after shuffling the rows.
 
 ---
 
@@ -44,10 +48,16 @@ slidenumbers: true
 
 # Jazz
 
+- Everything designed using an easy to use interface & object-based code.
+- Test also a model which always reports "true" (binary target).
+- Display of each of the trees types accuracies using graphs.
+
 ---
 
 # Reflections
 
+- Misunderstanding between members of the group.
+- 
 ---
 
 Include persistent custom footers and/or running slide numbers by using directives: 

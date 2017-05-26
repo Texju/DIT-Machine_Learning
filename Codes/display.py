@@ -41,8 +41,8 @@ def visualize_tree(tree, pdf = True):
 		else :
 			dot_data = sklearn.tree.export_graphviz(tree, out_file=path+".dot")
 	else :
-		print("Impossible you don't use a DecisionTree sorry")
-		print('Alright')
+		print("Not possible you don't use a DecisionTree sorry")
+		print('- Alright ! ')
 
 def comparasion_result(dict_classifier, data):
 	"""Display a comparaison of differents classifiers

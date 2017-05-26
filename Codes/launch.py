@@ -14,7 +14,7 @@ if len(sys.argv) >= 2:
     if len(sys.argv) >= 3:
         t = sys.argv[2]
 
-        if not (t == "DecisionTreeEntropy" or t == "DecisionTreeGini" or t == "RandomForest" or t=="GaussianNB"):
+        if not (t == "DecisionTreeEntropy" or t == "DecisionTreeGini" or t == "RandomForestEntropy" or t == "RandomForestGini" or t=="GaussianNB"):
             valid_input = False
             print("This tree type is not implemented. Please use \"python launch.py help\".")
     elif not (sys.argv[1] == "fancy_graphics" or sys.argv[1] == "help" or sys.argv[1] == "test_naive"):
@@ -34,6 +34,19 @@ if len(sys.argv) >= 2:
         elif sys.argv[1] == "5_fold_validation":
             main = MLMain(sys.argv[2])
             main.fiveFoldValidation()
+        elif sys.argv[1] == "display_decision_tree":
+            valid = True
+            if sys.argv[3] == "yes" :
+                pdf = True
+            elif sys.argv[3] == "no" :
+                sys.argv[3] = False
+            else :
+                print("You must specify a valid value. Please use \"python launch.py help\".")
+                valid = False
+            if valid:
+                main = MLMain(sys.argv[2])
+                main.display_decisision_tree(pdf)
+
         elif sys.argv[1]=="help":
             print("Command list:")
             print("---")
@@ -41,12 +54,14 @@ if len(sys.argv) >= 2:
             print("- test_naive: Test the accuracy of a model that return always yes using standard accuracy, F1 and confusion matrix.")
             print("- 5_fold_validation [tree type]: Test the accuracy of a model using five-fold validation")
             print("- fancy_graphics: compare the accuracies of all available models using fancy graphics")
+            print("- display_decision_tree [tree type] [\"yes\"/\"no\"] : display a DecisionTreeEntropy or DecisionTreeGini (and write a pdf if yes, dot file if no)")
             print("---")
             print("Possible values for [tree type]:")
             print("---")
             print("- DecisionTreeEntropy: A entropy-based decision tree")
             print("- DecisionTreeGini: A Gini-based decision tree")
-            print("- RandomForest: Random forest")
+            print("- RandomForestEntropy: entropy-based Random forest")
+            print("- RandomForestGini: Gini-based Random forest")
             print("- GaussianNB: Naive gaussian tree")
         else:
             print("Unknown argument. Please use \"python launch.py help\".")

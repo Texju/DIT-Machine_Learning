@@ -19,19 +19,19 @@ slidenumbers: true
 
 # Dataset Description
 
-- Gathered during a survey between the years 1994-1995. 
-- Goal: find a correlation between income and people's status.
-- Contains 199523 survey responses from U.S. population.
-- 41 demographic and employment related questions.
+- Gathered during a survey between the years *1994-1995*. 
+- Goal: find a correlation between *income and people's status*.
+- Contains *199523 survey* responses from U.S. population.
+- *41* demographic and employment related questions.
 
 ---
 
 # Data Quality Report and Analysis
 
-- 40 features 
-- A lot of missing informations. 
-- Some duplicated features (numerical indexes vs. words).
-- Priority : select the best features.
+- *40* features 
+- A lot of *missing informations*. 
+- Some *duplicated features* (numerical indexes vs. words).
+- Priority : *select the best features.*
 
 ---
 
@@ -57,17 +57,16 @@ slidenumbers: true
 # Reflections
 
 - Misunderstanding between members of the group.
-- 
+- plop
+
 ---
 
-Include persistent custom footers and/or running slide numbers by using directives: 
-
-```
-footer: © Unsigned Integer UG, 2014 
-slidenumbers: true
-```
-
-Make sure the two directives start on the *first line* of your markdown file, and ensure there are *no empty lines* between the two. 
+| Tree type             | Accuracy  | F1 Score  |
+| --------------------- |:---------:| ---------:|
+| Entropy Decision Tree | 93.04%    | 96.28%    |
+| Gini Decision Tree    | 93.04%    | 96.29%    |
+| Random Forest         | 95.07%    | 97.42%    |
+| Naive Gaussian Tree   | 71.72%    | 83.34%    |
 
 ---
 

@@ -71,7 +71,7 @@ class MLMain:
     def display_fancy_graphics(self):
         # DecisionTreeEntropy DecisionTreeGini RandomForest GaussianNB OCSVM SVC LinearRegression
         #  , "OCSVM", "SVC", "LinearRegression"
-        list_classifier = ["DecisionTreeEntropy", "DecisionTreeGini", "RandomForest", "GaussianNB"]
+        list_classifier = ["DecisionTreeEntropy", "DecisionTreeGini", "RandomForestEntropy","RandomForestGini" , "GaussianNB"]
         dict_classifier = {}
         for classifier in list_classifier :
             print("Creating tree"+ classifier)
@@ -89,6 +89,21 @@ class MLMain:
             print("______________________________")
         
         display.comparasion_result(dict_classifier, self.__data)
+
+    def display_decisision_tree(self, pdf = True):
+        if self.__tree.Type == "DecisionTreeEntropy" or self.__tree.Type == "DecisionTreeGini" :
+            print("Learn ")
+            self.__tree.learn()
+            print("Test ")
+            validation = MLValidation(self.__tree)
+            validation.test(self.__data)
+            print("Accuracy : " + str(validation.accuracy()))
+            print("F1 score : " + str(validation.accuracy_harmonic()))
+            display.visualize_tree(self.__tree, pdf)
+
+        else : 
+            print("Sorry, bad tree type")
+
 
     def fiveFoldValidation(self):
         self.__tree.learn(True)

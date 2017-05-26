@@ -67,7 +67,9 @@ class MLTree:
             self.__treeType = treeType
         elif treeType == "DecisionTreeGini":
             self.__treeType = treeType
-        elif treeType == "RandomForest":
+        elif treeType == "RandomForestEntropy":
+            self.__treeType = treeType
+        elif treeType == "RandomForestGini":
             self.__treeType = treeType
         elif treeType == "GaussianNB":
             self.__treeType = treeType
@@ -128,15 +130,17 @@ class MLTree:
             #---------------------------------------------------------------
             #create an instance of a tree model.
             if self.__treeType == "DecisionTreeEntropy":
-                self.__tree = tree.DecisionTreeClassifier(criterion='entropy')
+                self.__tree = tree.DecisionTreeClassifier(criterion='entropy', max_depth = 10)
             elif self.__treeType == "DecisionTreeGini":
-                self.__tree = tree.DecisionTreeClassifier(criterion='gini')
-            elif self.__treeType == "RandomForest":
-                self.__tree  = RandomForestClassifier(n_estimators=25)
+                self.__tree = tree.DecisionTreeClassifier(criterion='gini', max_depth = 10)
+            elif self.__treeType == "RandomForestEntropy":
+                self.__tree  = RandomForestClassifier(criterion='entropy', n_estimators=25, max_depth = 10)
+            elif self.__treeType == "RandomForestGini":
+                self.__tree  = RandomForestClassifier(criterion='gini', n_estimators=25, max_depth = 10)
             elif self.__treeType == "GaussianNB":
                 self.__tree = GaussianNB()
             elif self.__treeType == "MLP":
-                self.__tree = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(10,50), random_state=1)
+                self.__tree = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(10,40), random_state=1)
 
             if dontFit == False:
                 #fit the model using the numeric representations of the training data

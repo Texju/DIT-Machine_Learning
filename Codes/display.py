@@ -34,12 +34,12 @@ def visualize_tree(tree, pdf = True):
 	path = "../Results/tree"
 	if tree.Type == "DecisionTreeEntropy" or tree.Type == "DecisionTreeGini" : 
 		if pdf : 
-			dot_data = sklearn.tree.export_graphviz(tree, out_file=None)
+			dot_data = sklearn.tree.export_graphviz(tree.Tree, out_file=None)
 			graph = pydotplus.graph_from_dot_data(dot_data) 
 			graph.write_pdf(path+".pdf")
 			print("pdf is here : "+path)
 		else :
-			dot_data = sklearn.tree.export_graphviz(tree, out_file=path+".dot")
+			dot_data = sklearn.tree.export_graphviz(tree.Tree, out_file=path+".dot")
 	else :
 		print("Not possible you don't use a DecisionTree sorry")
 		print('- Alright ! ')

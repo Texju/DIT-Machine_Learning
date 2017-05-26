@@ -98,15 +98,6 @@ slidenumbers: true
  
 # Thanks
  
-| Tree type             | Accuracy | F1 Score |
-| --------------------- | -------  | -------- |
-| Entropy Decision Tree | 93.04%   | 96.28%   |
-| Gini Decision Tree    | 93.04%   | 96.29%   |
-| Entropy Random Forest | 95.07%   | 97.42%   |
-| Gini Random Forest    | 95.07%   | 97.42%   |
-| Naive Gaussian Tree   | 71.72%   | 83.34%   |
- 
- 
  
 ---
  

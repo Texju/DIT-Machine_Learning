@@ -58,7 +58,7 @@ slidenumbers: true
 - Depth tuning
 - Estimator count (Random Forest)
 - F1 score used
-- Categorical features : set to none.
+- Categorical features : missing values set to none.
  
 ---
 
@@ -97,7 +97,4 @@ slidenumbers: true
 ---
  
 # Thanks
- 
- 
----
  
